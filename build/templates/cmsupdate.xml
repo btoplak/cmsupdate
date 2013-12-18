@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5.0" method="upgrade">
+	<name>Cmsupdate</name>
+	<creationDate>##DATE##</creationDate>
+	<author>Nicholas K. Dionysopoulos</author>
+	<authorEmail>nicholas@akeebabackup.com</authorEmail>
+	<authorUrl>http://www.akeebabackup.com</authorUrl>
+	<copyright>Copyright (c)2010-2013 Nicholas K. Dionysopoulos</copyright>
+	<license>This component in released under the GNU/GPL v3 or later license</license>
+	<version>##VERSION##</version>
+	<description>A better Joomla! update component</description>
+
+	<!-- Public front end files -->
+	<files folder="frontend">
+		<filename>cmsupdate.php</filename>
+		<filename>index.html</filename>
+	</files>
+
+	<!-- Front end translation files -->
+	<languages folder="language/frontend">
+		<language tag="en-GB">en-GB/en-GB.com_cmsupdate.ini</language>
+	</languages>
+
+	<!-- SQL query files to execute on installation -->
+    <!--
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
+			<file driver="mysql">sql/install/mysql/install.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
+			<file driver="mysqli">sql/install/mysql/install.sql</file>
+
+			<file driver="sqlsrv" charset="utf8">sql/install/sqlsrv/install.sql</file>
+			<file driver="sqlsrv">sql/install/sqlsrv/install.sql</file>
+			<file driver="sqlazure" charset="utf8">sql/install/sqlsrv/install.sql</file>
+			<file driver="sqlazure">sql/install/sqlsrv/install.sql</file>
+
+			<file driver="postgresql" charset="utf8">sql/install/postgresql/install.sql</file>
+			<file driver="postgresql">sql/install/postgresql/install.sql</file>
+		</sql>
+	</install>
+	-->
+
+	<!-- SQL query files to execute on uninstallation -->
+    <!--
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysql">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli">sql/install/mysql/uninstall.sql</file>
+
+			<file driver="sqlsrv" charset="utf8">sql/install/sqlsrv/uninstall.sql</file>
+			<file driver="sqlsrv">sql/install/sqlsrv/uninstall.sql</file>
+			<file driver="sqlazure" charset="utf8">sql/install/sqlsrv/uninstall.sql</file>
+			<file driver="sqlazure">sql/install/sqlsrv/uninstall.sql</file>
+
+			<file driver="postgresql" charset="utf8">sql/install/postgresql/uninstall.sql</file>
+			<file driver="postgresql">sql/install/postgresql/uninstall.sql</file>
+		</sql>
+	</uninstall>
+	-->
+
+	<!-- SQL files to run on update -->
+    <!--
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/update/mysql</schemapath>
+			<schemapath type="sqlsrv">sql/update/sqlsrv</schemapath>
+			<schemapath type="sqlazure">sql/update/sqlazure</schemapath>
+			<schemapath type="postgresql">sql/update/postgresql</schemapath>
+		</schemas>
+	</update>
+	-->
+
+	<!-- Media files -->
+	<media destination="com_cmsupdate" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+
+	<!-- Administrator back-end section -->
+	<administration>
+		<!-- Administration menu -->
+		<menu view="cpanel"
+			img="../media/com_cmsupdate/images/cmsupdate-16.png">COM_CMSUPDATE</menu>
+
+		<!-- Back-end files -->
+		<files folder="backend">
+			<filename>access.xml</filename>
+			<filename>cmsupdate.php</filename>
+			<filename>config.xml</filename>
+			<filename>fof.xml</filename>
+			<filename>index.html</filename>
+			<filename>restore.php</filename>
+			<!--<filename>toolbar.php</filename>-->
+
+			<folder>controllers</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+
+		<!-- Back-end translation files -->
+		<languages folder="language/backend">
+			<language tag="en-GB">en-GB/en-GB.com_cmsupdate.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_cmsupdate.sys.ini</language>
+		</languages>
+
+	</administration>
+
+	<!-- Installation / uninstallation PHP scripts -->
+	<scriptfile>script.cmsupdate.php</scriptfile>
+</extension>
