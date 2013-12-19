@@ -153,11 +153,10 @@ class AcuDownload
 		$tmpDir = rtrim($tmpDir, '/\\');
 
 		/**
-		 * debugMsg('Importing from URL');
-		 * debugMsg('  file      : ' . $filename);
-		 * debugMsg('  frag      : ' . $frag);
-		 * debugMsg('  totalSize : ' . $totalSize);
-		 * /**/
+		debugMsg('Importing from URL');
+		debugMsg('  file      : ' . $filename);
+		debugMsg('  frag      : ' . $frag);
+		debugMsg('  totalSize : ' . $totalSize);
 		debugMsg('  doneSize  : ' . $doneSize);
 		/**/
 
@@ -227,7 +226,7 @@ class AcuDownload
 
 					if ($result === false)
 					{
-						throw new Exception("Could not download from $filename", 1);
+						throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTDOWNLOADFROMURL', $filename), 500);
 					}
 				}
 				catch (Exception $e)
@@ -276,7 +275,7 @@ class AcuDownload
 						//debugMsg("-- Can't open local file $local_file for writing");
 						// Can't open the file for writing
 						$retArray['status'] = false;
-						$retArray['error'] = 'Can\'t write to the local file ' . $local_file;
+						$retArray['error'] = JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTWRITELOCALFILE', $local_file);
 
 						return $retArray;
 					}

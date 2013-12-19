@@ -89,13 +89,13 @@ class AcuDownloadAdapterCurl extends AcuDownloadAdapterAbstract implements AcuDo
 
 		if ($result === false)
 		{
-			$error = "cURL error $errno: $errmsg";
+			$error = JText::sprintf('COM_CMSUPDATE_ERR_LIB_CURL_ERROR', $errno, $errmsg);
 		}
 		elseif ($http_status > 299)
 		{
 			$result = false;
 			$errno = $http_status;
-			$error = "Unexpected HTTP status $http_status";
+			$error = JText::sprintf('COM_CMSUPDATE_ERR_LIB_HTTPERROR', $http_status);
 		}
 
 		curl_close($ch);

@@ -76,16 +76,25 @@ class CmsupdateModelUpdates extends FOFModel
 	{
 		$config = JFactory::getConfig();
 		return array(
-			'host' => $config->get('ftp_host'),
-			'port' => $config->get('ftp_port'),
-			'username' => $config->get('ftp_user'),
-			'password' => $config->get('ftp_pass'),
-			'directory' => $config->get('ftp_root'),
-			'enabled' => $config->get('ftp_enable'),
+			'procengine'	=> $config->get('ftp_enable', 0) ? 'ftp' : 'direct',
+			'ftp_enable'	=> $config->get('ftp_enable', 0),
+			'ftp_host'		=> $config->get('ftp_host', 'localhost'),
+			'ftp_port'		=> $config->get('ftp_port', '21'),
+			'ftp_user'		=> $config->get('ftp_user', ''),
+			'ftp_pass'		=> $config->get('ftp_pass', ''),
+			'ftp_root'		=> $config->get('ftp_root', ''),
+			'tempdir'		=> $config->get('tmp_path', ''),
 		);
 	}
 
-
+	/**
+	 * Returns the (cached) list of updates for every section: installed version, current
+	 * branch updates, sts/lts updates, testing updates.
+	 *
+	 * @param   boolean  $force  Should I forcibly reload the update information, refreshing the cache?
+	 *
+	 * @return  array|null  The updates array, null if crap hits the fan
+	 */
 	public function getAllUpdates($force = false)
 	{
 		// Get the component parameters
@@ -279,5 +288,162 @@ class CmsupdateModelUpdates extends FOFModel
 		}
 
 		return $updateInfo;
+	}
+
+	/**
+	 * Checks if the site has Akeeba Backup 3.1 or later installed
+	 *
+	 * @return  boolean  True if Akeeba Backup is installed and enabled
+	 */
+	public function hasAkeebaBackup()
+	{
+		// Is the component installed, at all?
+		JLoader::import('joomla.filesystem.folder');
+
+		if (!JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_akeeba'))
+		{
+			return false;
+		}
+
+		// Make sure the component is enabled
+		JLoader::import('cms.component.helper');
+		$component = JComponentHelper::getComponent('com_akeeba', true);
+
+		if (!$component->enabled)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Sets the downloadurl state variable based on the update section specified. The
+	 * section can be lts, sts, current, installed or test. If that update section
+	 * comes up empty we throw an exception.
+	 *
+	 * @param   string  $section  The update section we are using to download Joomla!
+	 *
+	 * @throws  Exception
+	 */
+	public function setDownloadURLFromSection($section)
+	{
+		$allUpdates = $this->getAllUpdates();
+
+		if (!array_key_exists($section, $allUpdates))
+		{
+			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_NOSUCHSECTION', $section), 500);
+		}
+
+		$update = $allUpdates[$section];
+
+		if (empty($update['package']))
+		{
+			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_NOUPDATESINSECTION', $section), 500);
+		}
+
+		$this->setState('downloadurl', $update['package']);
+	}
+
+	/**
+	 * Try to prepare a world-writeable joomla.zip file in the site's temporary directory,
+	 * or throw an exception if it's not possible
+	 *
+	 * @return  void
+	 *
+	 * @throws  Exception
+	 */
+	public function prepareDownload()
+	{
+		// Get the FTP credentials from the request
+		JClientHelper::setCredentialsFromRequest('ftp');
+
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.folder');
+
+		$tmpDir = JFactory::getConfig()->get('tmp_path');
+		$tmpFile = rtrim($tmpDir, '/\\') . '/joomla.zip';
+
+		if (!is_dir($tmpDir))
+		{
+			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_INVALIDTMPDIR', $tmpDir) ,500);
+		}
+
+		// We will try to work around that anyway
+		/**
+		if (!is_writable($tmpDir))
+		{
+			throw new Exception(JText::_('COM_CMSUPDATE_ERR_DOWNLOAD_UNWRITEABLETMPDIR') ,500);
+		}
+		/**/
+
+		if (file_exists($tmpFile))
+		{
+			if (!@unlink($tmpFile))
+			{
+				JFile::delete($tmpFile);
+			}
+		}
+
+		if (file_exists($tmpFile))
+		{
+			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_CANTREMOVEOLDFILE', $tmpDir), 500);
+		}
+
+		$fp = @fopen($tmpFile, 'wb');
+		if ($fp === false)
+		{
+			$nada = '';
+			JFile::write($tmpFile, $nada);
+		}
+		else
+		{
+			fclose($fp);
+		}
+
+		$result = @chmod($tmpFile, 0777);
+
+		// If we can't chmod directly let's try using FTP
+		if (!$result)
+		{
+			$ftpOptions = JClientHelper::getCredentials('ftp');
+
+			if ($ftpOptions['enabled'])
+			{
+				JLoader::import('joomla.client.ftp');
+
+				if(version_compare(JVERSION,'3.0','ge'))
+				{
+					$ftp = JClientFTP::getInstance(
+						$ftpOptions['host'], $ftpOptions['port'], array(),
+						$ftpOptions['user'], $ftpOptions['pass']
+					);
+				}
+				else
+				{
+					$ftp = JFTP::getInstance(
+						$ftpOptions['host'], $ftpOptions['port'], array(),
+						$ftpOptions['user'], $ftpOptions['pass']
+					);
+				}
+
+				$path = JPath::clean(str_replace(JPATH_ROOT, $ftpOptions['root'], $tmpFile), '/');
+				$result = $ftp->chmod($path, 0777);
+			}
+		}
+
+		if (!$result)
+		{
+			throw new Exception(JText::_('COM_CMSUPDATE_ERR_DOWNLOAD_CANTCREATEWRITEABLEFILE'), 500);
+		}
+	}
+
+	/**
+	 * Step through the download. Remember to set the URL in the downloadurl state variable
+	 * e.g. by using setDownloadURLFromSection
+	 */
+	public function stepDownload()
+	{
+		// @todo
 	}
 }
