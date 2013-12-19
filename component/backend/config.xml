@@ -1,5 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+    <fieldset
+            name="sources"
+            label="COM_CMSUPDATE_CONFIG_SOURCES_LABEL"
+            description="COM_CMSUPDATE_CONFIG_SOURCES_DESC"
+            >
+
+        <field
+                name="updatesource"
+                type="list"
+                default="all"
+                label="COM_CMSUPDATE_CONFIG_UPDATESOURCE_LABEL"
+                description="COM_CMSUPDATE_CONFIG_UPDATESOURCE_DESC"
+                >
+            <option value="all">COM_CMSUPDATE_CONFIG_UPDATESOURCE_ALL</option>
+            <option value="lts">COM_CMSUPDATE_CONFIG_UPDATESOURCE_LTS</option>
+            <option value="sts">COM_CMSUPDATE_CONFIG_UPDATESOURCE_STS</option>
+            <option value="testing">COM_CMSUPDATE_CONFIG_UPDATESOURCE_TESTING</option>
+            <option value="custom">COM_CMSUPDATE_CONFIG_UPDATESOURCE_CUSTOM</option>
+        </field>
+
+        <field
+                name="customurl"
+                type="text"
+                default=""
+                length="50"
+                label="COM_CMSUPDATE_CONFIG_CUSTOMURL_LABEL"
+                description="COM_CMSUPDATE_CONFIG_CUSTOMURL_DESC"
+        />
+
+        <field
+                name="minnotify"
+                type="list"
+                default="current"
+                label="COM_CMSUPDATE_CONFIG_MINNOTIFY_LABEL"
+                description="COM_CMSUPDATE_CONFIG_MINNOTIFY_DESC"
+                >
+            <option value="test">COM_CMSUPDATE_CONFIG_MINNOTIFY_TEST</option>
+            <option value="sts">COM_CMSUPDATE_CONFIG_MINNOTIFY_STS</option>
+            <option value="lts">COM_CMSUPDATE_CONFIG_MINNOTIFY_LTS</option>
+            <option value="current">COM_CMSUPDATE_CONFIG_MINNOTIFY_CURRENT</option>
+        </field>
+
+        <field
+                name="frequency"
+                type="text"
+                default="6"
+                length="4"
+                label="COM_CMSUPDATE_CONFIG_FREQUENCY_LABEL"
+                description="COM_CMSUPDATE_CONFIG_FREQUENCY_DESC"
+        />
+
+        <field name="updatecache" type="hidden" value="" />
+
+        <field name="lastcheck" type="hidden" value="" />
+
+    </fieldset>
+
 	<fieldset
 		name="permissions"
 		label="JCONFIG_PERMISSIONS_LABEL"
@@ -14,5 +71,5 @@
 			filter="rules"
 			component="com_cmsupdate"
 			section="component" />
-	</fieldset>	
+	</fieldset>
 </config>

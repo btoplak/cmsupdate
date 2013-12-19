@@ -39,7 +39,7 @@ class AcuDownload
 	public function __construct()
 	{
 		// Find the best fitting adapter
-		$allAdapters = self::getFiles(__DIR__ . '/adapter');
+		$allAdapters = self::getFiles(__DIR__ . '/adapter', array(), array('abstract.php'));
 		$priority = 0;
 
 		foreach ($allAdapters as $adapterInfo)

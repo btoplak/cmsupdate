@@ -1,0 +1,15 @@
+hybrid smart write engine
+	first try using direct file writes. If it fails fall back to FTP.
+
+dry run
+	Check if files/directories are writeable without writing any files to disk.
+
+ftp to create writable joomla.zip
+	Before downloading try creating a zoomla.zip file with 0777 permissions, using direct file write or FTP if that fails
+
+cli
+	CLI script to auto upgrade Joomla!
+
+remote upgrade CRON
+	it must not rely on the database or Joomla! classes being available. An interface to restore.php protected
+	by a keyword?

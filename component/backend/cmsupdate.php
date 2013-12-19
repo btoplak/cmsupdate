@@ -27,6 +27,13 @@ if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
 	JError::raiseError ('500', 'Your Akeeba CMS Update installation is broken; please re-install. Alternatively, extract the installation archive and copy the fof directory inside your site\'s libraries directory.');
 }
 
+// Load the ACU library's autoloader
+if (!class_exists('AcuAutoloader', false))
+{
+	require_once __DIR__ . '/lib/autoloader.php';
+	AcuAutoloader::init();
+}
+
 // Access check, Joomla! 1.6 style.
 if (!JFactory::getUser()->authorise('core.manage', 'com_cmsupdate'))
 {

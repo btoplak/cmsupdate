@@ -22,13 +22,13 @@ defined('_JEXEC') or die();
 
 class AcuDownloadAdapterCurl extends AcuDownloadAdapterAbstract implements AcuDownloadInterface
 {
-	public function __contruct()
+	public function __construct()
 	{
 		$this->priority = 100;
 		$this->supportsFileSize = true;
 		$this->supportsChunkDownload = true;
 		$this->name = 'curl';
-		$this->isSupported = function_exists('curl_open') && function_exists('curl_exec') && function_exists('curl_close');
+		$this->isSupported = function_exists('curl_init') && function_exists('curl_exec') && function_exists('curl_close');
 	}
 
 	/**
