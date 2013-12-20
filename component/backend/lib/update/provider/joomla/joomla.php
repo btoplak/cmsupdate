@@ -264,6 +264,10 @@ class AcuUpdateProviderJoomla
 		{
 			$ret['testing'] = true;
 		}
+		elseif (substr($lastVersionPart, 0, 3) == 'dev')
+		{
+			$ret['testing'] = true;
+		}
 
 		// Find the upgrade relation of $jVersion to $currentVersion
 		if (version_compare($jVersion, $currentVersion, 'eq'))
@@ -366,6 +370,7 @@ class AcuUpdateProviderJoomla
 		$betaQualifierPosition = strpos($test, 'beta-');
 		$rcQualifierPosition = strpos($test, 'rc-');
 		$rcQualifierPosition2 = strpos($test, 'rc');
+		$devQualifiedPosition = strpos($test, 'dev');
 
 		if ($alphaQualifierPosition !== false)
 		{
@@ -402,6 +407,15 @@ class AcuUpdateProviderJoomla
 				$betaRevision = 1;
 			}
 			$test = substr($test, 0, $rcQualifierPosition2) . '.rc' . $betaRevision;
+		}
+		elseif ($devQualifiedPosition !== false)
+		{
+			$betaRevision = substr($test, $devQualifiedPosition + 6);
+			if (!$betaRevision)
+			{
+				$betaRevision = '';
+			}
+			$test = substr($test, 0, $devQualifiedPosition) . '.dev' . $betaRevision;
 		}
 
 		return $test;
@@ -564,6 +578,12 @@ class AcuUpdateProviderJoomla
 					$ret[$section]['infourl'] = $update['infourl']['url'];
 				}
 			}
+		}
+
+		// Catch the case when the latest current branch version is the installed version (up to date site)
+		if (empty($ret['current']['version']) && !empty($ret['installed']['version']))
+		{
+			$ret['current'] = $ret['installed'];
 		}
 
 		return $ret;
