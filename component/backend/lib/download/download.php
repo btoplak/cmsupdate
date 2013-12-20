@@ -139,17 +139,12 @@ class AcuDownload
 		$frag = $this->getParam('frag', -1);
 		$totalSize = $this->getParam('totalSize', -1);
 		$doneSize = $this->getParam('doneSize', -1);
-		$localFilename = $this->getParam('localFile', basename($filename));
 		$maxExecTime = $this->getParam('maxExecTime', 5);
 		$runTimeBias = $this->getParam('runTimeBias', 75);
 		$minExecTime = $this->getParam('minExecTime', 1);
-		$tmpDir = $this->getParam('tmpDir', null);
 
-		if (empty($tmpDir) || !is_dir($tmpDir) || !is_writable($tmpDir))
-		{
-			$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
-		}
-
+		$localFilename = 'joomla.zip';
+		$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
 		$tmpDir = rtrim($tmpDir, '/\\');
 
 		/**

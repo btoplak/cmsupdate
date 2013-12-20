@@ -74,17 +74,37 @@ class CmsupdateModelUpdates extends FOFModel
 	 */
 	public function getFTPOptions()
 	{
+		// Initialise from Joomla! Global Configuration
 		$config = JFactory::getConfig();
-		return array(
-			'procengine'	=> $config->get('ftp_enable', 0) ? 'ftp' : 'direct',
-			'ftp_enable'	=> $config->get('ftp_enable', 0),
-			'ftp_host'		=> $config->get('ftp_host', 'localhost'),
-			'ftp_port'		=> $config->get('ftp_port', '21'),
-			'ftp_user'		=> $config->get('ftp_user', ''),
-			'ftp_pass'		=> $config->get('ftp_pass', ''),
-			'ftp_root'		=> $config->get('ftp_root', ''),
-			'tempdir'		=> $config->get('tmp_path', ''),
+		$retArray = array(
+			'enable'	=> $config->get('ftp_enable', 0),
+			'host'		=> $config->get('ftp_host', 'localhost'),
+			'port'		=> $config->get('ftp_port', '21'),
+			'user'		=> $config->get('ftp_user', ''),
+			'pass'		=> $config->get('ftp_pass', ''),
+			'root'		=> $config->get('ftp_root', ''),
+			'tempdir'	=> $config->get('tmp_path', ''),
 		);
+
+		// Get the username and password from the state variables, if it exists
+		$stateUser = $this->getState('user', '', 'raw');
+		$statePass = $this->getState('pass', '', 'raw');
+
+		if (!empty($stateUser))
+		{
+			$retArray['user'] = $stateUser;
+		}
+
+		if (!empty($statePass))
+		{
+			$retArray['pass'] = $statePass;
+		}
+
+		// Apply the FTP credentials to Joomla! itself
+		JLoader::import('joomla.client.helper');
+		JClientHelper::setCredentials('ftp', $retArray['user'], $retArray['pass']);
+
+		return $retArray;
 	}
 
 	/**
@@ -355,9 +375,6 @@ class CmsupdateModelUpdates extends FOFModel
 	 */
 	public function prepareDownload()
 	{
-		// Get the FTP credentials from the request
-		JClientHelper::setCredentialsFromRequest('ftp');
-
 		JLoader::import('joomla.filesystem.file');
 		JLoader::import('joomla.filesystem.folder');
 
@@ -406,23 +423,23 @@ class CmsupdateModelUpdates extends FOFModel
 		// If we can't chmod directly let's try using FTP
 		if (!$result)
 		{
-			$ftpOptions = JClientHelper::getCredentials('ftp');
+			$ftpOptions = $this->getFTPOptions();
 
-			if ($ftpOptions['enabled'])
+			if ($ftpOptions['enable'])
 			{
 				JLoader::import('joomla.client.ftp');
 
 				if(version_compare(JVERSION,'3.0','ge'))
 				{
 					$ftp = JClientFTP::getInstance(
-						$ftpOptions['host'], $ftpOptions['port'], array(),
+						$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
 						$ftpOptions['user'], $ftpOptions['pass']
 					);
 				}
 				else
 				{
 					$ftp = JFTP::getInstance(
-						$ftpOptions['host'], $ftpOptions['port'], array(),
+						$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
 						$ftpOptions['user'], $ftpOptions['pass']
 					);
 				}
@@ -441,9 +458,301 @@ class CmsupdateModelUpdates extends FOFModel
 	/**
 	 * Step through the download. Remember to set the URL in the downloadurl state variable
 	 * e.g. by using setDownloadURLFromSection
+	 *
+	 * @param   boolean  $staggered  Should I try a staggered (multi-step) download? Default is true.
+	 *
+	 * @return  array  A return array giving the status of the staggered download
 	 */
-	public function stepDownload()
+
+	public function stepDownload($staggered = true)
 	{
-		// @todo
+		$params = array(
+			'file'		=> $this->getState('downloadurl', ''),
+			'frag'		=> $this->getState('frag', -1),
+			'totalSize'	=> $this->getState('totalSize', -1),
+			'doneSize'	=> $this->getState('doneSize', -1),
+		);
+
+		if ($staggered)
+		{
+			$download = new AcuDownload();
+			$retArray = $download->importFromURL($params);
+		}
+		else
+		{
+			$retArray = array(
+				"status"    => true,
+				"error"     => '',
+				"frag"      => 1,
+				"totalSize" => 0,
+				"doneSize"  => 0,
+				"percent"   => 0,
+			);
+
+			try
+			{
+				$result = $this->adapter->downloadAndReturn($params['file']);
+
+				if ($result === false)
+				{
+					throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTDOWNLOADFROMURL', $params['file']), 500);
+				}
+
+				$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
+				$tmpDir = rtrim($tmpDir, '/\\');
+				$localFilename = $tmpDir . '/joomla.zip';
+
+				$status = file_put_contents($localFilename, $result);
+
+				if (!$status)
+				{
+					JLoader::import('joomla.filesystem.file');
+					$status = JFile::write($localFilename, $result);
+				}
+
+				if (!$status)
+				{
+					throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTWRITETOFILE', $localFilename), 500);
+				}
+
+				$retArray['status'] = true;
+				$retArray['totalSize'] = strlen($result);
+				$retArray['doneSize'] = $retArray['totalSize'];
+				$retArray['percent'] = 100;
+			}
+			catch (Exception $e)
+			{
+				$retArray['status'] = true;
+				$retArray['error'] = $e->getMessage();
+			}
+		}
+
+		return $retArray;
+	}
+
+	/**
+	 * Create a (semi-)random string
+	 *
+	 * @param   integer  $l  Length of the random string, default 32 characters
+	 * @param   string   $c  Character set to pick characters from
+	 *
+	 * @return  string  Your random string
+	 */
+	protected function getRandomString($l = 32, $c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+	{
+		for ($s = '', $cl = strlen($c)-1, $i = 0; $i < $l; $s .= $c[mt_rand(0, $cl)], ++$i);
+		return $s;
+	}
+
+	public function createRestorationINI()
+	{
+		// Get a password
+		$password = $this->getRandomString(64);
+
+		$this->setState('update_password', $password);
+
+		// Get the absolute path to site's root
+		$siteroot = JPATH_SITE;
+		$siteroot = str_replace('\\', '/', $siteroot);
+
+		$jreg = JFactory::getConfig();
+		$tempdir = $jreg->get('tmp_path');
+		$file = $tempdir . '/joomla.zip';
+
+		$data = "<?php\ndefined('_AKEEBA_RESTORATION') or die();\n";
+		$data .= '$restoration_setup = array(' . "\n";
+		$data .= <<<ENDDATA
+	'kickstart.security.password' => '$password',
+	'kickstart.tuning.max_exec_time' => '5',
+	'kickstart.tuning.run_time_bias' => '75',
+	'kickstart.tuning.min_exec_time' => '0',
+	'kickstart.procengine' => 'hybrid',
+	'kickstart.setup.sourcefile' => 'joomla.zip',
+	'kickstart.setup.destdir' => '$siteroot',
+	'kickstart.setup.restoreperms' => '0',
+	'kickstart.setup.filetype' => 'zip',
+	'kickstart.setup.dryrun' => '0'
+ENDDATA;
+
+		$ftpOptions = $this->getFTPOptions();
+
+		if ($ftpOptions['enable'])
+		{
+			// Get an instance of the FTP client
+			JLoader::import('joomla.client.ftp');
+
+			if(version_compare(JVERSION,'3.0','ge'))
+			{
+				$ftp = JClientFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			}
+			else
+			{
+				$ftp = JFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			}
+
+			// Is the tempdir really writable?
+			$writable = @is_writeable($tempdir);
+
+			if ($writable)
+			{
+				// Let's be REALLY sure
+				$fp = @fopen($tempdir . '/test.txt', 'w');
+				if ($fp === false)
+				{
+					$writable = false;
+				}
+				else
+				{
+					fclose($fp);
+					unlink($tempdir . '/test.txt');
+				}
+			}
+
+			// If the tempdir is not writable, create a new writable subdirectory
+			if (!$writable)
+			{
+				JLoader::import('joomla.filesystem.folder');
+
+				$dest = JPath::clean(str_replace(JPATH_ROOT, $ftpOptions['root'], $tempdir . '/cmsupdate'), '/');
+
+				if (!@mkdir($tempdir . '/cmsupdate'))
+				{
+					$ftp->mkdir($dest);
+				}
+
+				if (!@chmod($tempdir . '/cmsupdate', 511))
+				{
+					$ftp->chmod($dest, 511);
+				}
+
+				$tempdir .= '/cmsupdate';
+			}
+
+			// Just in case the temp-directory was off-root, try using the default tmp directory
+			$writable = @is_writeable($tempdir);
+
+			if (!$writable)
+			{
+				$tempdir = JPATH_ROOT . '/tmp';
+
+				// Does the JPATH_ROOT/tmp directory exist?
+				if (!is_dir($tempdir))
+				{
+					$htAccessContents = "order deny,allow\ndeny from all\nallow from none\n";
+					JLoader::import('joomla.filesystem.file');
+					JFolder::create($tempdir, 511);
+					JFile::write($tempdir . '/.htaccess', $htAccessContents);
+				}
+
+				// If it exists and it is unwritable, try creating a writable cmsupdate subdirectory
+				if (!is_writable($tempdir))
+				{
+					JLoader::import('joomla.filesystem.folder');
+
+					$dest = JPath::clean(str_replace(JPATH_ROOT, $ftpOptions['root'], $tempdir . '/cmsupdate'), '/');
+					if (!@mkdir($tempdir . '/cmsupdate'))
+					{
+						$ftp->mkdir($dest);
+					}
+					if (!@chmod($tempdir . '/cmsupdate', 511))
+					{
+						$ftp->chmod($dest, 511);
+					}
+
+					$tempdir .= '/cmsupdate';
+				}
+			}
+
+			// If we still have no writable directory, we'll try /tmp and the system's temp-directory
+			$writable = @is_writeable($tempdir);
+
+			if (!$writable)
+			{
+				if (@is_dir('/tmp') && @is_writable('/tmp'))
+				{
+					$tempdir = '/tmp';
+				}
+				else
+				{
+					// Try to find the system temp path
+					$tmpfile = @tempnam("dummy", "");
+					$systemp = @dirname($tmpfile);
+					@unlink($tmpfile);
+
+					if (!empty($systemp))
+					{
+						if (@is_dir($systemp) && @is_writable($systemp))
+						{
+							$tempdir = $systemp;
+						}
+					}
+				}
+			}
+
+			$data .= <<<ENDDATA
+	,
+	'kickstart.ftp.ssl' => '0',
+	'kickstart.ftp.passive' => '1',
+	'kickstart.ftp.host' => '{$ftpOptions['host']}',
+	'kickstart.ftp.port' => '{$ftpOptions['port']}',
+	'kickstart.ftp.user' => '{$ftpOptions['user']}',
+	'kickstart.ftp.pass' => '{$ftpOptions['pass']}',
+	'kickstart.ftp.dir' => '{$ftpOptions['root']}',
+	'kickstart.ftp.tempdir' => '$tempdir'
+ENDDATA;
+		}
+
+		$data .= ');';
+
+		// Remove the old file, if it's there...
+		JLoader::import('joomla.filesystem.file');
+
+		$componentPaths = FOFPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
+
+		$configpath = $componentPaths['admin'] . '/restoration.php';
+
+		if (file_exists($configpath))
+		{
+			if (!@unlink($configpath))
+			{
+				JFile::delete($configpath);
+			}
+		}
+
+		// Write the new file. First try directly.
+		if (function_exists('file_put_contents'))
+		{
+			$result = @file_put_contents($configpath, $data);
+			if ($result !== false)
+			{
+				$result = true;
+			}
+		}
+		else
+		{
+			$fp = @fopen($configpath, 'wt');
+			if ($fp !== false)
+			{
+				$result = @fwrite($fp, $data);
+				if ($result !== false)
+				{
+					$result = true;
+				}
+				@fclose($fp);
+			}
+		}
+
+		if ($result === false)
+		{
+			$result = JFile::write($configpath, $data);
+		}
+
+		return $result;
 	}
 }
