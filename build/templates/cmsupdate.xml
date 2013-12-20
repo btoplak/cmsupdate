@@ -94,7 +94,7 @@
 			<filename>fof.xml</filename>
 			<filename>index.html</filename>
 			<filename>restore.php</filename>
-			<!--<filename>toolbar.php</filename>-->
+			<filename>toolbar.php</filename>
 
 			<folder>controllers</folder>
             <folder>lib</folder>
