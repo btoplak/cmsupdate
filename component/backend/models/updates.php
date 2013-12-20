@@ -137,7 +137,7 @@ class CmsupdateModelUpdates extends FOFModel
 
 			$nextCheckTimeStamp = $lastCheck + 3600 * $frequency;
 
-			$force = $nextCheckTimeStamp >= time();
+			$force = $nextCheckTimeStamp <= time();
 		}
 
 		// Do I have a cache? If not I have to force an update fetch.
@@ -261,7 +261,8 @@ class CmsupdateModelUpdates extends FOFModel
 		$params = JComponentHelper::getParams('com_cmsupdate');
 		$minnotify = $params->get('minnotify', 'current');
 
-		$jVersion = $this->sanitiseVersion(JVERSION);
+		$provider = new AcuUpdateProviderJoomla();
+		$jVersion = $provider->sanitiseVersion(JVERSION);
 
 		// We trigger an update only when there is a new release of the minimum specified stability available for download
 		switch ($minnotify)
