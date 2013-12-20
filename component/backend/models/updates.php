@@ -1,8 +1,8 @@
 <?php
 /**
- *  @package    AkeebaCMSUpdate
- *  @copyright  Copyright (c)2010-2013 Nicholas K. Dionysopoulos
- *  @license    GNU General Public License version 3, or later
+ * @package    AkeebaCMSUpdate
+ * @copyright  Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @license    GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ class CmsupdateModelUpdates extends FOFModel
 	/**
 	 * Public constructor
 	 *
-	 * @param   array   $config  The model configuration array
+	 * @param   array $config The model configuration array
 	 */
 	public function __construct($config = array())
 	{
@@ -77,13 +77,13 @@ class CmsupdateModelUpdates extends FOFModel
 		// Initialise from Joomla! Global Configuration
 		$config = JFactory::getConfig();
 		$retArray = array(
-			'enable'	=> $config->get('ftp_enable', 0),
-			'host'		=> $config->get('ftp_host', 'localhost'),
-			'port'		=> $config->get('ftp_port', '21'),
-			'user'		=> $config->get('ftp_user', ''),
-			'pass'		=> $config->get('ftp_pass', ''),
-			'root'		=> $config->get('ftp_root', ''),
-			'tempdir'	=> $config->get('tmp_path', ''),
+			'enable'  => $config->get('ftp_enable', 0),
+			'host'    => $config->get('ftp_host', 'localhost'),
+			'port'    => $config->get('ftp_port', '21'),
+			'user'    => $config->get('ftp_user', ''),
+			'pass'    => $config->get('ftp_pass', ''),
+			'root'    => $config->get('ftp_root', ''),
+			'tempdir' => $config->get('tmp_path', ''),
 		);
 
 		// Get the username and password from the state variables, if it exists
@@ -111,7 +111,7 @@ class CmsupdateModelUpdates extends FOFModel
 	 * Returns the (cached) list of updates for every section: installed version, current
 	 * branch updates, sts/lts updates, testing updates.
 	 *
-	 * @param   boolean  $force  Should I forcibly reload the update information, refreshing the cache?
+	 * @param   boolean $force Should I forcibly reload the update information, refreshing the cache?
 	 *
 	 * @return  array|null  The updates array, null if crap hits the fan
 	 */
@@ -164,10 +164,10 @@ class CmsupdateModelUpdates extends FOFModel
 		{
 			// Get the update sources we are configured to use
 			$sources = array(
-				'lts'		=> true,
-				'sts'		=> true,
-				'test'		=> true,
-				'custom'	=> $params->get('customurl', ''),
+				'lts'    => true,
+				'sts'    => true,
+				'test'   => true,
+				'custom' => $params->get('customurl', ''),
 			);
 
 			switch ($params->get('updatesource', 'all'))
@@ -225,7 +225,7 @@ class CmsupdateModelUpdates extends FOFModel
 	/**
 	 * Returns information about whether we need to update Joomla!
 	 *
-	 * @param   boolean  $force  Set to true to forcibly reload from the network
+	 * @param   boolean $force Set to true to forcibly reload from the network
 	 *
 	 * @return  object
 	 */
@@ -240,7 +240,7 @@ class CmsupdateModelUpdates extends FOFModel
 
 		$updateInfo = array(
 			'status'    => false,
-			'source'	=> 'none',
+			'source'    => 'none',
 			'installed' => null,
 			'current'   => null,
 			'sts'       => null,
@@ -274,7 +274,7 @@ class CmsupdateModelUpdates extends FOFModel
 					$updateInfo->source = 'test';
 					break;
 				}
-				// Do not break; we have to fall through the rest of the switch
+			// Do not break; we have to fall through the rest of the switch
 
 			case 'lts':
 				// Do we have an lts release?
@@ -284,7 +284,7 @@ class CmsupdateModelUpdates extends FOFModel
 					$updateInfo->source = 'lts';
 					break;
 				}
-				// Do not break; we have to fall through the rest of the switch
+			// Do not break; we have to fall through the rest of the switch
 
 			case 'sts':
 				// Do we have an sts release?
@@ -294,7 +294,7 @@ class CmsupdateModelUpdates extends FOFModel
 					$updateInfo->source = 'sts';
 					break;
 				}
-				// Do not break; we have to fall through the rest of the switch
+			// Do not break; we have to fall through the rest of the switch
 
 			case 'current':
 				// Do we have a current branch release?
@@ -342,7 +342,7 @@ class CmsupdateModelUpdates extends FOFModel
 	 * section can be lts, sts, current, installed or test. If that update section
 	 * comes up empty we throw an exception.
 	 *
-	 * @param   string  $section  The update section we are using to download Joomla!
+	 * @param   string $section The update section we are using to download Joomla!
 	 *
 	 * @throws  Exception
 	 */
@@ -383,16 +383,16 @@ class CmsupdateModelUpdates extends FOFModel
 
 		if (!is_dir($tmpDir))
 		{
-			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_INVALIDTMPDIR', $tmpDir) ,500);
+			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_INVALIDTMPDIR', $tmpDir), 500);
 		}
 
 		// We will try to work around that anyway
 		/**
-		if (!is_writable($tmpDir))
-		{
-			throw new Exception(JText::_('COM_CMSUPDATE_ERR_DOWNLOAD_UNWRITEABLETMPDIR') ,500);
-		}
-		/**/
+		 * if (!is_writable($tmpDir))
+		 * {
+		 * throw new Exception(JText::_('COM_CMSUPDATE_ERR_DOWNLOAD_UNWRITEABLETMPDIR') ,500);
+		 * }
+		 * /**/
 
 		if (file_exists($tmpFile))
 		{
@@ -429,7 +429,7 @@ class CmsupdateModelUpdates extends FOFModel
 			{
 				JLoader::import('joomla.client.ftp');
 
-				if(version_compare(JVERSION,'3.0','ge'))
+				if (version_compare(JVERSION, '3.0', 'ge'))
 				{
 					$ftp = JClientFTP::getInstance(
 						$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
@@ -459,7 +459,7 @@ class CmsupdateModelUpdates extends FOFModel
 	 * Step through the download. Remember to set the URL in the downloadurl state variable
 	 * e.g. by using setDownloadURLFromSection
 	 *
-	 * @param   boolean  $staggered  Should I try a staggered (multi-step) download? Default is true.
+	 * @param   boolean $staggered Should I try a staggered (multi-step) download? Default is true.
 	 *
 	 * @return  array  A return array giving the status of the staggered download
 	 */
@@ -467,10 +467,10 @@ class CmsupdateModelUpdates extends FOFModel
 	public function stepDownload($staggered = true)
 	{
 		$params = array(
-			'file'		=> $this->getState('downloadurl', ''),
-			'frag'		=> $this->getState('frag', -1),
-			'totalSize'	=> $this->getState('totalSize', -1),
-			'doneSize'	=> $this->getState('doneSize', -1),
+			'file'      => $this->getState('downloadurl', ''),
+			'frag'      => $this->getState('frag', -1),
+			'totalSize' => $this->getState('totalSize', -1),
+			'doneSize'  => $this->getState('doneSize', -1),
 		);
 
 		if ($staggered)
@@ -533,14 +533,18 @@ class CmsupdateModelUpdates extends FOFModel
 	/**
 	 * Create a (semi-)random string
 	 *
-	 * @param   integer  $l  Length of the random string, default 32 characters
-	 * @param   string   $c  Character set to pick characters from
+	 * @param   integer $l Length of the random string, default 32 characters
+	 * @param   string  $c Character set to pick characters from
 	 *
 	 * @return  string  Your random string
 	 */
 	protected function getRandomString($l = 32, $c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
 	{
-		for ($s = '', $cl = strlen($c)-1, $i = 0; $i < $l; $s .= $c[mt_rand(0, $cl)], ++$i);
+		for ($s = '', $cl = strlen($c) - 1, $i = 0; $i < $l; $s .= $c[mt_rand(0, $cl)], ++$i)
+		{
+			;
+		}
+
 		return $s;
 	}
 
@@ -581,7 +585,7 @@ ENDDATA;
 			// Get an instance of the FTP client
 			JLoader::import('joomla.client.ftp');
 
-			if(version_compare(JVERSION,'3.0','ge'))
+			if (version_compare(JVERSION, '3.0', 'ge'))
 			{
 				$ftp = JClientFTP::getInstance(
 					$ftpOptions['host'], $ftpOptions['port'], array('type' => FTP_BINARY),
@@ -754,5 +758,343 @@ ENDDATA;
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Post-update clean up
+	 *
+	 * @return  void
+	 */
+	public function finalize()
+	{
+		JLoader::import('joomla.filesystem.file');
+		JLoader::import('joomla.filesystem.folder');
+
+		// Where is our temp directory?
+		$jreg = JFactory::getConfig();
+		$tempdir = $jreg->get('tmp_path');
+
+		$file = rtrim($tempdir, '/\\') . '/joomla.zip';
+
+		// Remove the update file
+		if (file_exists($file))
+		{
+			if (!@unlink($tempdir . '/' . $file))
+			{
+				JFile::delete($tempdir . '/' . $file);
+			}
+		}
+
+		// Remove the restoration.php file
+		JLoader::import('joomla.filesystem.file');
+
+		$componentPaths = FOFPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
+
+		$configpath = $componentPaths['admin'] . '/restoration.php';
+
+		if (file_exists($configpath))
+		{
+			if (!@unlink($configpath))
+			{
+				JFile::delete($configpath);
+			}
+		}
+
+		// Delete the temp-dir we may have created
+		if (is_dir($tempdir . '/cmsupdate'))
+		{
+			$this->recursive_remove_directory($tempdir . '/cmsupdate');
+		}
+
+		$this->runUpdateScripts();
+	}
+
+	/**
+	 * Recursively remove a directory and its contents
+	 *
+	 * @param   string  $directory  The directory to remove
+	 *
+	 * @return  boolean  True on success
+	 */
+	private function recursive_remove_directory($directory)
+	{
+		JLoader::import('joomla.filesystem.folder');
+
+		// if the path has a slash at the end we remove it here
+		if (substr($directory, -1) == '/')
+		{
+			$directory = substr($directory, 0, -1);
+		}
+
+		if (!file_exists($directory) || !is_dir($directory))
+		{
+			return false;
+		}
+		elseif (!is_readable($directory))
+		{
+			return false;
+		}
+		else
+		{
+			$handle = opendir($directory);
+
+			while (($item = readdir($handle)) !== false)
+			{
+				if ($item != '.' && $item != '..')
+				{
+					$path = $directory . '/' . $item;
+
+					if (is_dir($path))
+					{
+
+						$this->recursive_remove_directory($path);
+					}
+					else
+					{
+						if (!@unlink($path))
+						{
+							JFolder::delete($path);
+						}
+					}
+				}
+			}
+
+			closedir($handle);
+
+			$status = @rmdir($directory);
+
+			if ($status === false)
+			{
+				$status = JFolder::delete($directory);
+			}
+
+			return $status;
+		}
+	}
+
+	/**
+	 * Executes the post-update scripts
+	 *
+	 * @return  boolean  True on success
+	 */
+	private function runUpdateScripts()
+	{
+		JLoader::import('joomla.installer.install');
+		$installer = JInstaller::getInstance();
+
+		$installer->setPath('source', JPATH_ROOT);
+		$installer->setPath('extension_root', JPATH_ROOT);
+
+		if (!$installer->setupInstall())
+		{
+			$installer->abort(JText::_('JLIB_INSTALLER_ABORT_DETECTMANIFEST'));
+
+			return false;
+		}
+
+		$installer->extension = JTable::getInstance('extension');
+		$installer->extension->load(700);
+		$installer->setAdapter($installer->extension->type);
+
+		$manifest = $installer->getManifest();
+
+		$manifestPath = JPath::clean($installer->getPath('manifest'));
+		$element = preg_replace('/\.xml/', '', basename($manifestPath));
+
+		// Run the script file
+		$scriptElement = $manifest->scriptfile;
+		$manifestScript = (string)$manifest->scriptfile;
+
+		if ($manifestScript)
+		{
+			$manifestScriptFile = JPATH_ROOT . '/' . $manifestScript;
+
+			if (is_file($manifestScriptFile))
+			{
+				// load the file
+				include_once $manifestScriptFile;
+			}
+
+			$classname = 'JoomlaInstallerScript';
+
+			if (class_exists($classname))
+			{
+				$manifestClass = new $classname($this);
+			}
+		}
+
+		ob_start();
+		ob_implicit_flush(false);
+
+		if ($manifestClass && method_exists($manifestClass, 'preflight'))
+		{
+			if ($manifestClass->preflight('update', $this) === false)
+			{
+				$installer->abort(JText::_('JLIB_INSTALLER_ABORT_FILE_INSTALL_CUSTOM_INSTALL_FAILURE'));
+
+				return false;
+			}
+		}
+
+		$msg = ob_get_contents(); // create msg object; first use here
+		ob_end_clean();
+
+		// Get a database connector object
+		$db = JFactory::getDbo();
+
+		// Check to see if a file extension by the same name is already installed
+		// If it is, then update the table because if the files aren't there
+		// we can assume that it was (badly) uninstalled
+		// If it isn't, add an entry to extensions
+		$query = $db->getQuery(true);
+		$query->select($query->qn('extension_id'))
+			->from($query->qn('#__extensions'));
+		$query->where($query->qn('type') . ' = ' . $query->q('file'))
+			->where($query->qn('element') . ' = ' . $query->q('joomla'));
+		$db->setQuery($query);
+
+		try
+		{
+			$db->execute();
+		}
+		catch (Exception $e)
+		{
+			// Install failed, roll back changes
+			$installer->abort(
+				JText::sprintf('JLIB_INSTALLER_ABORT_FILE_ROLLBACK', JText::_('JLIB_INSTALLER_UPDATE'), $db->stderr(true))
+			);
+
+			return false;
+		}
+
+		$id = $db->loadResult();
+		$row = JTable::getInstance('extension');
+
+		if ($id)
+		{
+			// Load the entry and update the manifest_cache
+			$row->load($id);
+			// Update name
+			$row->set('name', 'files_joomla');
+			// Update manifest
+			$row->manifest_cache = $installer->generateManifestCache();
+
+			if (!$row->store())
+			{
+				// Install failed, roll back changes
+				$installer->abort(
+					JText::sprintf('JLIB_INSTALLER_ABORT_FILE_ROLLBACK', JText::_('JLIB_INSTALLER_UPDATE'), $db->stderr(true))
+				);
+
+				return false;
+			}
+		}
+		else
+		{
+			// Add an entry to the extension table with a whole heap of defaults
+			$row->set('name', 'files_joomla');
+			$row->set('type', 'file');
+			$row->set('element', 'joomla');
+			// There is no folder for files so leave it blank
+			$row->set('folder', '');
+			$row->set('enabled', 1);
+			$row->set('protected', 0);
+			$row->set('access', 0);
+			$row->set('client_id', 0);
+			$row->set('params', '');
+			$row->set('system_data', '');
+			$row->set('manifest_cache', $installer->generateManifestCache());
+
+			if (!$row->store())
+			{
+				// Install failed, roll back changes
+				$installer->abort(JText::sprintf('JLIB_INSTALLER_ABORT_FILE_INSTALL_ROLLBACK', $db->stderr(true)));
+
+				return false;
+			}
+
+			// Set the insert id
+			$row->set('extension_id', $db->insertid());
+
+			// Since we have created a module item, we add it to the installation step stack
+			// so that if we have to rollback the changes we can undo it.
+			$installer->pushStep(array('type' => 'extension', 'extension_id' => $row->extension_id));
+		}
+
+		/*
+		 * Let's run the queries for the file
+		 */
+		if ($manifest->update)
+		{
+			$result = $installer->parseSchemaUpdates($manifest->update->schemas, $row->extension_id);
+			if ($result === false)
+			{
+				// Install failed, rollback changes
+				$installer->abort(JText::sprintf('JLIB_INSTALLER_ABORT_FILE_UPDATE_SQL_ERROR', $db->stderr(true)));
+
+				return false;
+			}
+		}
+
+		// Start Joomla! 1.6
+		ob_start();
+		ob_implicit_flush(false);
+
+		if ($manifestClass && method_exists($manifestClass, 'update'))
+		{
+			if ($manifestClass->update($installer) === false)
+			{
+				// Install failed, rollback changes
+				$installer->abort(JText::_('JLIB_INSTALLER_ABORT_FILE_INSTALL_CUSTOM_INSTALL_FAILURE'));
+
+				return false;
+			}
+		}
+
+		$msg .= ob_get_contents(); // append messages
+		ob_end_clean();
+
+		// Lastly, we will copy the manifest file to its appropriate place.
+		$manifest = array();
+		$manifest['src'] = $installer->getPath('manifest');
+		$manifest['dest'] = JPATH_MANIFESTS . '/files/' . basename($installer->getPath('manifest'));
+
+		if (!$installer->copyFiles(array($manifest), true))
+		{
+			// Install failed, rollback changes
+			$installer->abort(JText::_('JLIB_INSTALLER_ABORT_FILE_INSTALL_COPY_SETUP'));
+
+			return false;
+		}
+
+		// Clobber any possible pending updates
+		$update = JTable::getInstance('update');
+		$uid = $update->find(
+			array('element' => $element, 'type' => 'file', 'client_id' => '', 'folder' => '')
+		);
+
+		if ($uid)
+		{
+			$update->delete($uid);
+		}
+
+		// And now we run the postflight
+		ob_start();
+		ob_implicit_flush(false);
+
+		if ($manifestClass && method_exists($manifestClass, 'postflight'))
+		{
+			$manifestClass->postflight('update', $this);
+		}
+
+		$msg .= ob_get_contents(); // append messages
+		ob_end_clean();
+
+		if ($msg != '')
+		{
+			$installer->set('extension_message', $msg);
+		}
+
+		return true;
 	}
 }
