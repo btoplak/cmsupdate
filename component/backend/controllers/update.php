@@ -34,7 +34,7 @@ class CmsupdateControllerUpdate extends FOFController
 	 */
 	public function execute($task)
 	{
-		$allowedTasks = array('browse', 'init', 'download', 'extract', 'finalise');
+		$allowedTasks = array('browse', 'init', 'download', 'downloader', 'extract', 'finalise');
 
 		if (!in_array($task, $allowedTasks))
 		{
@@ -59,11 +59,61 @@ class CmsupdateControllerUpdate extends FOFController
 
 	public function init()
 	{
+		// Apply the usual CSRF protection
 		if ($this->csrfProtection)
 		{
 			$this->_csrfProtection();
 		}
 
-		// @todo
+		// Get a reference to the model
+		$model = $this->getThisModel();
+
+		// Reset its saved state
+		$model->resetSavedState();
+
+		// Reading model state variables when the state is not set but the variables
+		// exist in the request causes the model to read the variables from the request
+		// and persist them in the session. So, whetever you do, DO NOT REMOVE THESE
+		// UNUSED VARIABLES CODE FROM HERE!!!
+		$dummy = $model->backupOnUpdate;
+		$dummy = $model->user;
+		$dummy = $model->pass;
+
+		// Try to perform the initialisation
+		try
+		{
+			// Tell the model which update section to use
+			$model->setDownloadURLFromSection($this->input->getCmd('source', ''));
+			// Prepare for downloading the update
+			$model->prepareDownload();
+		}
+		catch (Exception $e)
+		{
+			// Oops, something went wrong
+			$url = 'index.php?option=com_cmsupdate';
+			$this->setRedirect($url, $e->getMessage(), 'error');
+
+			return;
+		}
+
+		// Proceed to download
+		$token = '';
+		if (!FOFPlatform::getInstance()->isCli())
+		{
+			$token = '&' . JFactory::getSession()->getFormToken() . '=1';
+		}
+
+		$url = 'index.php?option=com_cmsupdate&view=update&task=download' . $token;
+		$this->setRedirect($url);
+	}
+
+	public function download()
+	{
+		if ($this->csrfProtection)
+		{
+			$this->_csrfProtection();
+		}
+
+		return $this->display(false);
 	}
 } 

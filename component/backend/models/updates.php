@@ -365,7 +365,9 @@ class CmsupdateModelUpdates extends FOFModel
 			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_NOUPDATESINSECTION', $section), 500);
 		}
 
-		$this->setState('downloadurl', $update['package']);
+		// This trick forces the downloadurl variable to persist in the session
+		JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', $update['package']);
+		$dummy = $this->downloadurl;
 	}
 
 	/**
