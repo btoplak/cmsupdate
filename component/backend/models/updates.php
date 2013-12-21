@@ -134,6 +134,7 @@ class CmsupdateModelUpdates extends FOFModel
 
 			// Get the last time we checked for updates
 			$lastCheck = $params->get('lastcheck', 0);
+			$this->setState('lastCheck', $lastCheck);
 
 			$nextCheckTimeStamp = $lastCheck + 3600 * $frequency;
 
@@ -207,6 +208,7 @@ class CmsupdateModelUpdates extends FOFModel
 			// Save the cache
 			$params->set('updatecache', $cacheEncoded);
 			$params->set('lastcheck', time());
+			$this->setState('lastCheck', time());
 
 			$component = JComponentHelper::getComponent('com_cmsupdate');
 
@@ -1097,5 +1099,121 @@ ENDDATA;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns a fancy formatted time lapse code
+	 *
+	 * @param   integer  $referencedate	 Timestamp of the reference date/time
+	 * @param   integer  $timepointer	 Timestamp of the current date/time
+	 * @param   string   $measureby		 One of s, m, h, d, or y (time unit)
+	 * @param   boolean  $autotext		 X
+	 *
+	 * @return  string
+	 */
+	private function timeago($referencedate = 0, $timepointer = 0, $measureby = '', $autotext = true)
+	{
+		if (empty($timepointer))
+		{
+			$timepointer = time();
+		}
+
+		// Raw time difference
+		$Raw	 = $timepointer - $referencedate;
+		$Clean	 = abs($Raw);
+
+		if (($Raw >= 0) && ($Raw < 10))
+		{
+			return JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_JUSTNOW');
+		}
+
+		$calcNum = array(
+			array('s', 60),
+			array('m', 60 * 60),
+			array('h', 60 * 60 * 60),
+			array('d', 60 * 60 * 60 * 24),
+			array('y', 60 * 60 * 60 * 24 * 365)
+		);
+
+		$calc = array(
+			's'	 => array(1, 'second'),
+			'm'	 => array(60, 'minute'),
+			'h'	 => array(60 * 60, 'hour'),
+			'd'	 => array(60 * 60 * 24, 'day'),
+			'y'	 => array(60 * 60 * 24 * 365, 'year')
+		);
+
+		if ($measureby == '')
+		{
+			$usemeasure = 's';
+
+			for ($i = 0; $i < count($calcNum); $i++)
+			{
+				if ($Clean <= $calcNum[$i][1])
+				{
+					$usemeasure	 = $calcNum[$i][0];
+					$i			 = count($calcNum);
+				}
+			}
+		}
+		else
+		{
+			$usemeasure = $measureby;
+		}
+
+		$datedifference = floor($Clean / $calc[$usemeasure][0]);
+
+		if ($autotext == true && ($timepointer == time()))
+		{
+			if ($Raw < 0)
+			{
+				$prospect = 'fromnow';
+			}
+			else
+			{
+				$prospect = 'ago';
+			}
+		}
+		else
+		{
+			$prospect = '';
+		}
+
+		if ($referencedate != 0)
+		{
+			if ($datedifference == 1)
+			{
+				return $datedifference . ' ' . JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_UNIT_' . $calc[$usemeasure][1])  . ' ' . JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_PROSPECT_' . $prospect);
+			}
+			else
+			{
+				return $datedifference . ' ' . JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_UNIT_' . $calc[$usemeasure][1] . 's')  . ' ' . JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_PROSPECT_' . $prospect);
+			}
+		}
+		else
+		{
+			return JText::_('COM_CMSUPDATE_UPDATES_LBL_TIMEAGO_NOREF');
+		}
+	}
+
+	/**
+	 * Returns a human readable, slightly fuzzy string on how long ago the
+	 * update check took place, e.g. "just now", "10 minutes ago", "1 year
+	 * ago".
+	 *
+	 * @return  string  The human readable string on how long ago the update check took place
+	 */
+	public function getHumanReadableLastCheck()
+	{
+		$lastCheck = $this->getState('lastCheck', 0);
+
+		if (empty($lastCheck))
+		{
+			JLoader::import('cms.component.helper');
+			$params = JComponentHelper::getParams('com_cmsupdate');
+			$lastCheck = $params->get('lastcheck', 0);
+		}
+
+		return $this->timeago($lastCheck);
 	}
 }

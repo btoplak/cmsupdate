@@ -20,15 +20,20 @@
 
 defined('_JEXEC') or die();
 
-class CmsupdateToolbar extends FOFToolbar
+class CmsupdateViewUpdates extends FOFViewHtml
 {
-	public function onUpdates()
+	public function onBrowse($tpl = null)
 	{
-		$this->renderSubmenu();
+		$model = $this->getModel();
 
-		// Set toolbar title
-		JToolBarHelper::title(JText::_('COM_CMSUPDATE'));
+		$force = $model->getState('force', 0);
 
-		JToolBarHelper::preferences('com_cmsupdate', 550, 875);
+		$this->updateInfo 		= $model->getUpdateInfo($force);
+		$this->lastCheckHR 		= $model->getHumanReadableLastCheck();
+		$this->hasAkeebaBackup 	= $model->hasAkeebaBackup();
+		$this->ftpOptions		= $model->getFTPOptions();
+		$this->needsConfig		= $this->hasAkeebaBackup || ($this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass'])));
+
+		return true;
 	}
 }
