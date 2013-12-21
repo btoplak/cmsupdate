@@ -93,7 +93,7 @@ class CmsupdateControllerUpdate extends FOFController
 			$url = 'index.php?option=com_cmsupdate';
 			$this->setRedirect($url, $e->getMessage(), 'error');
 
-			return;
+			return true;
 		}
 
 		// Proceed to download
@@ -135,5 +135,60 @@ class CmsupdateControllerUpdate extends FOFController
 		echo '###' . json_encode($ret) . '###';
 
 		return true;
+	}
+
+	public function extract()
+	{
+		if ($this->csrfProtection)
+		{
+			$this->_csrfProtection();
+		}
+
+		$model = $this->getThisModel();
+
+		$backupOnUpdate = $model->backupOnUpdate;
+		$hasAkeebaBackup = $model->hasAkeebaBackup();
+		$takenBackup = $this->input->getInt('is_backed_up', 0);
+
+		// Try to create a restoration.ini file
+		if (!$takenBackup)
+		{
+			if (!$model->createRestorationINI())
+			{
+				$url = 'index.php?option=com_cmsupdate';
+				$msg = JText::_('COM_CMSUPDATE_EXTRACT_ERR_CANWRITEINI');
+				$this->setRedirect($url, $msg, 'error');
+
+				return true;
+			}
+		}
+
+		if ($backupOnUpdate && $hasAkeebaBackup && !$takenBackup)
+		{
+			// Save the update_password in the session, we'll need it when this page is called again
+			JFactory::getApplication()->setUserState($model->getHash() . 'update_password', $model->update_password);
+
+			// Backup the site
+			$return_url = 'index.php?option=com_cmsupdate&task=extract&is_backed_up=1&' . JFactory::getSession()->getFormToken() . '=1';
+			// @todo Allow the user to specify a backup profile
+			$redirect_url = 'index.php?option=com_akeeba&view=backup&autostart=1&returnurl=' . urlencode($return_url);
+
+			$this->setRedirect($redirect_url);
+
+			return true;
+		}
+
+		return $this->display(false);
+	}
+
+	public function finalise()
+	{
+		// Do not add CSRF protection in this view; it called after the
+		// installation of the update. At this point the session MAY have
+		// already expired.
+
+		$this->getThisModel()->finalize();
+
+		$this->setRedirect('index.php?option=com_cmsupdate&force=1');
 	}
 } 

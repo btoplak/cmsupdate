@@ -43,4 +43,13 @@ class CmsupdateViewUpdates extends FOFViewHtml
 
 		return true;
 	}
+
+	public function onExtract($tpl = null)
+	{
+		$this->setLayout('extract');
+
+		$this->update_password = $this->getModel()->update_password;
+
+		return true;
+	}
 }

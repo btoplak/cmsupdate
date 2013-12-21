@@ -21,7 +21,11 @@
 if (typeof(cmsupdate) === 'undefined') {
     var cmsupdate = {
         ajax_url:           '',
-        error_callback:     ''
+        error_callback:     '',
+        update_password:    '',
+        stat_files:         0,
+        stat_inbytes:       0,
+        stat_outbytes:      0
     };
 }
 
@@ -210,6 +214,145 @@ cmsupdate.doAjax = function(data, successCallback, errorCallback)
 }
 
 /**
+ * Performs an encrypted AJAX request and returns the parsed JSON output.
+ * The cmsupdate.ajax_url is used as the AJAX proxy URL.
+ * If there is no errorCallback, the cmsupdate.error_callback is used.
+ *
+ * @param   object    data             An object with the query data, e.g. a serialized form
+ * @param   function  successCallback  A function accepting a single object parameter, called on success
+ * @param   function  errorCallback    A function accepting a single string parameter, called on failure
+ */
+cmsupdate.doEncryptedAjax = function(data, successCallback, errorCallback)
+{
+    var json = JSON.stringify(data);
+    if( this.update_password.length > 0 )
+    {
+        json = AesCtr.encrypt( json, this.update_password, 128 );
+    }
+    var post_data = {
+        'json':     json
+    };
+
+    var structure =
+    {
+        type: "POST",
+        url: this.ajax_url,
+        cache: false,
+        data: data,
+        timeout: 600000,
+
+        success: function(msg, responseXML)
+        {
+            // Initialize
+            var junk = null;
+            var message = "";
+
+            // Get rid of junk before the data
+            var valid_pos = msg.indexOf('###');
+
+            if( valid_pos == -1 )
+            {
+                // Valid data not found in the response
+                msg = 'Invalid AJAX data:\n' + msg;
+
+                if (errorCallback == null)
+                {
+                    if(cmsupdate.error_callback != null)
+                    {
+                        cmsupdate.error_callback(msg);
+                    }
+                }
+                else
+                {
+                    errorCallback(msg);
+                }
+
+                return;
+            }
+            else if( valid_pos != 0 )
+            {
+                // Data is prefixed with junk
+                junk = msg.substr(0, valid_pos);
+                message = msg.substr(valid_pos);
+            }
+            else
+            {
+                message = msg;
+            }
+
+            message = message.substr(3); // Remove triple hash in the beginning
+
+            // Get of rid of junk after the data
+            var valid_pos = message.lastIndexOf('###');
+
+            message = message.substr(0, valid_pos); // Remove triple hash in the end
+
+            // Decrypt if required
+            var data = null;
+            if( cmsupdate.update_password.length > 0 )
+            {
+                try
+                {
+                    var data = JSON.parse(message);
+                }
+                catch(err)
+                {
+                    message = AesCtr.decrypt(message, cmsupdate.update_password.length, 128);
+                }
+            }
+
+            try
+            {
+                if (empty(data))
+                {
+                    data = JSON.parse(message);
+                }
+            }
+            catch(err)
+            {
+                var msg = err.message + "\n<br/>\n<pre>\n" + message + "\n</pre>";
+
+                if (errorCallback == null)
+                {
+                    if (cmsupdate.error_callback != null)
+                    {
+                        cmsupdate.error_callback(msg);
+                    }
+                }
+                else
+                {
+                    errorCallback(msg);
+                }
+
+                return;
+            }
+
+            // Call the callback function
+            successCallback(data);
+        },
+
+        error: function(req)
+        {
+            var message = 'AJAX Loading Error: ' + req.statusText;
+
+            if(errorCallback == null)
+            {
+                if (cmsupdate.error_callback != null)
+                {
+                    cmsupdate.error_callback(message);
+                }
+            }
+            else
+            {
+                errorCallback(message);
+            }
+        }
+    };
+
+    cmsupdate.jQuery.ajax( structure );
+}
+
+/**
  * Generic error handler
  *
  * @param   string  msg  The error message to display
@@ -295,6 +438,9 @@ cmsupdate.humanFileSize = function (bytes, si)
     return bytes.toFixed(1)+' '+units[u];
 };
 
+/**
+ * Starts the download of the update file
+ */
 cmsupdate.startDownload = function()
 {
     (function($){
@@ -303,7 +449,7 @@ cmsupdate.startDownload = function()
 
         var jsonObject = {
             frag:       -1,
-            totalSize:  -1,
+            totalSize:  -1
         };
 
         var data = {
@@ -317,6 +463,11 @@ cmsupdate.startDownload = function()
     })(cmsupdate.jQuery);
 }
 
+/**
+ * Steps through the download of the update file
+ *
+ * @param   object  data  The return data from the server
+ */
 cmsupdate.stepDownload = function(data)
 {
     (function($){
@@ -382,6 +533,139 @@ cmsupdate.stepDownload = function(data)
         }
     })(cmsupdate.jQuery);
 }
+
+/**
+ * Pings the update script (making sure its executable)
+ */
+cmsupdate.pingExtract = function()
+{
+    // Reset variables
+    this.stat_files = 0;
+    this.stat_inbytes = 0;
+    this.stat_outbytes = 0;
+
+    // Do AJAX post
+    var post = {task : 'ping'};
+
+    this.doEncryptedAjax(post, function(data) {
+        cmsupdate.startExtract(data);
+    });
+}
+
+cmsupdate.startExtract = function()
+{
+    // Reset variables
+    this.stat_files = 0;
+    this.stat_inbytes = 0;
+    this.stat_outbytes = 0;
+
+    var post = { task : 'startRestore' };
+
+    this.doEncryptedAjax(post, function(data){
+        cmsupdate.stepExtract(data);
+    });
+}
+
+cmsupdate.stepExtract = function(data)
+{
+    if(data.status == false)
+    {
+        // handle failure
+        cmsupdate.error_callback(data.message);
+
+        return;
+    }
+
+    if( !empty(data.Warnings) )
+    {
+        // @todo Handle warnings
+        /**
+        $.each(data.Warnings, function(i, item){
+            $('#warnings').append(
+                $(document.createElement('div'))
+                    .html(item)
+            );
+            $('#warningsBox').show('fast');
+        });
+        /**/
+    }
+
+    // Parse total size, if exists
+    if(data.totalsize != undefined)
+    {
+        if(is_array(data.filelist))
+        {
+            cmsupdate.stat_total = 0;
+            cmsupdate.jQuery.each(data.filelist,function(i, item)
+            {
+                cmsupdate.stat_total += item[1];
+            });
+        }
+        cmsupdate.stat_outbytes = 0;
+        cmsupdate.stat_inbytes = 0;
+        cmsupdate.stat_files = 0;
+    }
+
+    // Update GUI
+    cmsupdate.stat_inbytes += data.bytesIn;
+    cmsupdate.stat_outbytes += data.bytesOut;
+    cmsupdate.stat_files += data.files;
+
+    var percentage = 0;
+
+    if (cmsupdate.stat_total > 0)
+    {
+        percentage = 100 * cmsupdate.stat_inbytes / cmsupdate.stat_total;
+
+        if(percentage < 0)
+        {
+            percentage = 0;
+        }
+        else if (percentage > 100)
+        {
+            percentage = 100;
+        }
+    }
+
+    if(data.done) percentage = 100;
+
+    setProgressBar(percentage, 'extractProgressBar');
+    cmsupdate.jQuery('#extractProgressBarTextPercent').text(percentage.toFixed(1));
+    cmsupdate.jQuery('#extractProgressBarTextIn').text(cmsupdate.humanFileSize(cmsupdate.stat_inbytes, 0) + ' / ' + cmsupdate.humanFileSize(cmsupdate.stat_total, 0));
+    cmsupdate.jQuery('#extractProgressBarTextOut').text(cmsupdate.humanFileSize(cmsupdate.stat_outbytes, 0));
+    cmsupdate.jQuery('#extractProgressBarTextFile').text(data.lastfile);
+
+    if (!empty(data.factory))
+    {
+        cmsupdate.extract_factory = data.factory;
+    }
+
+    if(data.done)
+    {
+        cmsupdate.finalizeUpdate();
+    }
+    else
+    {
+        // Do AJAX post
+        post = {
+            task: 'stepRestore',
+            factory: data.factory
+        };
+        cmsupdate.doEncryptedAjax(post, function(data){
+            cmsupdate.stepExtract(data);
+        });
+    }
+}
+
+cmsupdate.finalizeUpdate = function ()
+{
+    // Do AJAX post
+    var post = { task : 'finalizeRestore', factory: cmsupdate.factory };
+    cmsupdate.doEncryptedAjax(post, function(data){
+        window.location('index.php?option=com_cmsupdate&view=update&task=finalise');
+    });
+}
+
 
 /**
  * Is a variable empty?
