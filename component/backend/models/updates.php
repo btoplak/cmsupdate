@@ -341,6 +341,33 @@ class CmsupdateModelUpdates extends FOFModel
 	}
 
 	/**
+	 * Checks if the site has Admin Tools installed
+	 *
+	 * @return  boolean  True if Admin Tools is installed and enabled
+	 */
+	public function hasAdminTools()
+	{
+		// Is the component installed, at all?
+		JLoader::import('joomla.filesystem.folder');
+
+		if (!JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_admintools'))
+		{
+			return false;
+		}
+
+		// Make sure the component is enabled
+		JLoader::import('cms.component.helper');
+		$component = JComponentHelper::getComponent('com_admintools', true);
+
+		if (!$component->enabled)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Sets the downloadurl state variable based on the update section specified. The
 	 * section can be lts, sts, current, installed or test. If that update section
 	 * comes up empty we throw an exception.

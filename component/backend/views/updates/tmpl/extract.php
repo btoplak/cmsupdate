@@ -61,6 +61,27 @@ JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 	</div>
 </div>
 
+<div id="extractPingError" style="display: none">
+	<div class="alert alert-error">
+		<p>
+			<span class="icon icon-exclamation-sign"></span>
+			<?php echo JText::_('COM_CMSUPDATE_EXTRACT_ERR_CANTPING_TEXT'); ?>
+		</p>
+		<?php if ($this->hasAdmintools):?>
+		<p>
+			<?php echo JText::_('COM_CMSUPDATE_EXTRACT_ERR_CANTPING_ADMINTOOLS'); ?>
+		</p>
+		<p>
+			<a href="index.php?option=com_cmsupdate&view=update&task=htmaker&<?php echo JFactory::getSession()->getFormToken() ?>=1" class="btn btn-primary">
+				<?php echo JText::_('COM_CMSUPDATE_EXTRACT_BTN_ADMINTOOLS'); ?>
+			</a>
+		</p>
+		<?php else: ?>
+		<?php echo JText::_('COM_CMSUPDATE_EXTRACT_ERR_CANTPING_CONTACTHOST'); ?>
+		<?php endif; ?>
+	</div>
+</div>
+
 <div id="extractError" style="display: none">
 	<div class="alert alert-danger">
 		<h4>
@@ -93,7 +114,7 @@ JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 			cmsupdate.ajax_url = '<?php echo JUri::base() ?>components/com_cmsupdate/restore.php';
 			cmsupdate.error_callback = extractErrorHandler;
 			cmsupdate.update_password = '<?php echo $this->update_password ?>';
-			cmsupdate.startExtract();
+			cmsupdate.pingExtract();
 		});
 	})(akeeba.jQuery);
 </script>

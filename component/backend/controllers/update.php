@@ -34,7 +34,7 @@ class CmsupdateControllerUpdate extends FOFController
 	 */
 	public function execute($task)
 	{
-		$allowedTasks = array('browse', 'init', 'download', 'downloader', 'extract', 'finalise');
+		$allowedTasks = array('browse', 'init', 'download', 'downloader', 'extract', 'finalise', 'htmaker');
 
 		if (!in_array($task, $allowedTasks))
 		{
@@ -163,11 +163,11 @@ class CmsupdateControllerUpdate extends FOFController
 			}
 		}
 
+		// Save the update_password in the session, we'll need it if this page is reloaded
+		JFactory::getApplication()->setUserState($model->getHash() . 'update_password', $model->update_password);
+
 		if ($backupOnUpdate && $hasAkeebaBackup && !$takenBackup)
 		{
-			// Save the update_password in the session, we'll need it when this page is called again
-			JFactory::getApplication()->setUserState($model->getHash() . 'update_password', $model->update_password);
-
 			// Backup the site
 			$return_url = 'index.php?option=com_cmsupdate&task=extract&is_backed_up=1&' . JFactory::getSession()->getFormToken() . '=1';
 			// @todo Allow the user to specify a backup profile
@@ -190,5 +190,20 @@ class CmsupdateControllerUpdate extends FOFController
 		$this->getThisModel()->finalize();
 
 		$this->setRedirect('index.php?option=com_cmsupdate&force=1');
+	}
+
+	public function htmaker()
+	{
+		$htMakerModel = FOFModel::getTmpInstance('Htmaker', 'AdmintoolsModel');
+		$config = $htMakerModel->loadConfiguration();
+		$config->exceptionfiles[] = 'administrator/components/com_cmsupdate/restore.php';
+		$config->exceptionfiles = array_unique($config->exceptionfiles);
+		$htMakerModel->saveConfiguration($config, true);
+		$htMakerModel->makeHtaccess();
+
+		$url = 'index.php?option=com_cmsupdate&task=extract&' . JFactory::getSession()->getFormToken() . '=1';
+		$this->setRedirect($url);
+
+		return true;
 	}
 } 

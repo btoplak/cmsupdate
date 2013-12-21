@@ -12,6 +12,7 @@
 /build/templates/release*.json
 /build/build.properties
 
+/component/backend/restoration.php
 /component/cmsupdate.xml
 /component/fof
 /component/language/backend/en-GB

@@ -1,9 +1,12 @@
-alternate download adapters
-	fopen
-	fsockopen
+warn on downgrade
+	if a user tries to downgrade to a previous Joomla! version issue a warning
 
 backup before update with selected backup profile
 	choose the backup profile you want to use in the configuration
+
+alternate download adapters
+	fopen
+	fsockopen
 
 dry run
 	Check if files/directories are writeable without writing any files to disk.
@@ -31,3 +34,7 @@ DONE:
 
 √ ftp to create writable joomla.zip
 	Before downloading try creating a zoomla.zip file with 0777 permissions, using direct file write or FTP if that fails
+
+√ ping restore.php
+	if that fails tell the user to check his .htaccess
+	if admin tools is installed, offer to add restore.php to .htaccess Maker and run .htaccess Maker

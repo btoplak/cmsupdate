@@ -49,6 +49,7 @@ class CmsupdateViewUpdates extends FOFViewHtml
 		$this->setLayout('extract');
 
 		$this->update_password = $this->getModel()->update_password;
+		$this->hasAdmintools = $this->getModel()->hasAdminTools();
 
 		return true;
 	}

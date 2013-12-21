@@ -297,7 +297,7 @@ cmsupdate.doEncryptedAjax = function(data, successCallback, errorCallback)
                 }
                 catch(err)
                 {
-                    message = AesCtr.decrypt(message, cmsupdate.update_password.length, 128);
+                    message = AesCtr.decrypt(message, cmsupdate.update_password, 128);
                 }
             }
 
@@ -547,8 +547,14 @@ cmsupdate.pingExtract = function()
     // Do AJAX post
     var post = {task : 'ping'};
 
-    this.doEncryptedAjax(post, function(data) {
+    this.doEncryptedAjax(post,
+    function(data) {
         cmsupdate.startExtract(data);
+    }, function (msg) {
+        (function($){
+            $('#extractProgress').hide();
+            $('#extractPingError').show();
+        })(cmsupdate.jQuery);
     });
 }
 
@@ -629,7 +635,7 @@ cmsupdate.stepExtract = function(data)
 
     if(data.done) percentage = 100;
 
-    setProgressBar(percentage, 'extractProgressBar');
+    cmsupdate.setProgressBar(percentage, 'extractProgressBar');
     cmsupdate.jQuery('#extractProgressBarTextPercent').text(percentage.toFixed(1));
     cmsupdate.jQuery('#extractProgressBarTextIn').text(cmsupdate.humanFileSize(cmsupdate.stat_inbytes, 0) + ' / ' + cmsupdate.humanFileSize(cmsupdate.stat_total, 0));
     cmsupdate.jQuery('#extractProgressBarTextOut').text(cmsupdate.humanFileSize(cmsupdate.stat_outbytes, 0));
