@@ -36,4 +36,11 @@ class CmsupdateViewUpdates extends FOFViewHtml
 
 		return true;
 	}
+
+	public function onDownload($tpl = null)
+	{
+		$this->setLayout('download');
+
+		return true;
+	}
 }

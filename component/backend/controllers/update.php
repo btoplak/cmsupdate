@@ -116,4 +116,24 @@ class CmsupdateControllerUpdate extends FOFController
 
 		return $this->display(false);
 	}
+
+	public function downloader()
+	{
+		$json = $this->input->get('json', '', 'raw');
+		$params = json_decode($json, true);
+		$model = $this->getThisModel();
+		if (is_array($params) && !empty($params))
+		{
+			foreach ($params as $k => $v)
+			{
+				$model->setState($k, $v);
+			}
+		}
+
+		$ret = $model->stepDownload();
+
+		echo '###' . json_encode($ret) . '###';
+
+		return true;
+	}
 } 

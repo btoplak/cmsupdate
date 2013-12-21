@@ -34,6 +34,15 @@ if (!class_exists('AcuAutoloader', false))
 	AcuAutoloader::init();
 }
 
+// Load Akeeba Strapper
+if (!class_exists('AkeebaStrapper'))
+{
+	require_once FOFTemplateUtils::parsePath('media://akeeba_strapper/strapper.php', true);
+
+	AkeebaStrapper::jQuery();
+	AkeebaStrapper::bootstrap();
+}
+
 // Access check, Joomla! 1.6 style.
 if (!JFactory::getUser()->authorise('core.manage', 'com_cmsupdate'))
 {
