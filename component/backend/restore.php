@@ -3016,6 +3016,7 @@ class AKPostprocHybrid extends AKAbstractPostproc
 
 		$remotePath = dirname($this->filename);
 		$removePath = AKFactory::get('kickstart.setup.destdir','');
+		$root = rtrim($removePath, '/\\');
 		if(!empty($removePath))
 		{
 			$removePath = ltrim($removePath, "/");
@@ -3035,7 +3036,7 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		$remoteName = $absoluteFTPPath.'/'.$onlyFilename;
 
 		// Does the directory exist?
-		if (!is_dir($absoluteFSPath))
+		if (!is_dir($root . '/' . $absoluteFSPath))
 		{
 			$ret = $this->createDirRecursive( $absoluteFSPath, 0755);
 			if(($ret === false) && ($this->useFTP))
@@ -3056,14 +3057,14 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		}
 
 		// Try copying directly
-		$ret = @copy($this->tempFilename, $this->filename);
+		$ret = @copy($this->tempFilename, $root . '/' . $this->filename);
 
 		if ($ret === false)
 		{
 			$this->fixPermissions($this->filename);
 			$this->unlink($this->filename);
 
-			$ret = @copy($this->tempFilename, $this->filename);
+			$ret = @copy($this->tempFilename, $root . '/' . $this->filename);
 		}
 
 		if ($this->useFTP && ($ret === false))
@@ -3099,7 +3100,7 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		$restorePerms = AKFactory::get('kickstart.setup.restoreperms', false);
 		$perms = $restorePerms ? $perms : 0644;
 
-		$ret = @chmod($this->filename, $perms);
+		$ret = @chmod($root . '/' . $this->filename, $perms);
 		if ($this->useFTP && ($ret === false))
 		{
 			@ftp_chmod($this->_handle, $perms, $remoteName);
