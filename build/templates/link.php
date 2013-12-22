@@ -28,6 +28,8 @@ $symlink_folders = array(
 												=> 'plugins/system/oneclickaction/sql',
 	'../liveupdate/plugins/system/oneclickaction/language'
 												=> 'translations/plugins/system/oneclickaction',
+	'translations/plugins/system/oneclickaction/en-GB'
+												=> 'plugins/system/oneclickaction/language/en-GB',
 	# FOF
 	'../fof/fof'								=> 'component/fof',
 
