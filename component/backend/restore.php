@@ -3038,18 +3038,15 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		if (!is_dir($absoluteFSPath))
 		{
 			$ret = $this->createDirRecursive( $absoluteFSPath, 0755);
-			if($ret === false) {
-				$this->setError(AKText::sprintf('FTP_COULDNT_UPLOAD', $this->filename));
-				return false;
-			}
-
-			if ($this->useFTP)
+			if(($ret === false) && ($this->useFTP))
 			{
 				$ret = @ftp_chdir($this->handle, $absoluteFTPPath);
-				if($ret === false) {
-					$this->setError(AKText::sprintf('FTP_COULDNT_UPLOAD', $this->filename));
-					return false;
-				}
+			}
+
+			if($ret === false)
+			{
+				$this->setError(AKText::sprintf('FTP_COULDNT_UPLOAD', $this->filename));
+				return false;
 			}
 		}
 
@@ -5346,8 +5343,9 @@ class AKText extends AKAbstractObject
 		'ARCHIVE_FILE' => 'Archive file:',
 		'SELECT_EXTRACTION' => 'Select an extraction method',
 		'WRITE_TO_FILES' => 'Write to files:',
+		'WRITE_HYBRID' => 'Hybrid (use FTP only if needed)',
 		'WRITE_DIRECTLY' => 'Directly',
-		'WRITE_FTP' => 'Use FTP',
+		'WRITE_FTP' => 'Use FTP for all files',
 		'FTP_HOST' => 'FTP host name:',
 		'FTP_PORT' => 'FTP port:',
 		'FTP_FTPS' => 'Use FTP over SSL (FTPS)',

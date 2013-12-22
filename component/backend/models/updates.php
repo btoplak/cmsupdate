@@ -597,20 +597,22 @@ class CmsupdateModelUpdates extends FOFModel
 
 		$data = "<?php\ndefined('_AKEEBA_RESTORATION') or die();\n";
 		$data .= '$restoration_setup = array(' . "\n";
+
+		$ftpOptions = $this->getFTPOptions();
+		$engine = $ftpOptions['enable'] ? 'hybrid' : 'direct';
+
 		$data .= <<<ENDDATA
 	'kickstart.security.password' => '$password',
 	'kickstart.tuning.max_exec_time' => '5',
 	'kickstart.tuning.run_time_bias' => '75',
 	'kickstart.tuning.min_exec_time' => '0',
-	'kickstart.procengine' => 'hybrid',
-	'kickstart.setup.sourcefile' => 'joomla.zip',
+	'kickstart.procengine' => '$engine',
+	'kickstart.setup.sourcefile' => '{$tempdir}/joomla.zip',
 	'kickstart.setup.destdir' => '$siteroot',
 	'kickstart.setup.restoreperms' => '0',
 	'kickstart.setup.filetype' => 'zip',
 	'kickstart.setup.dryrun' => '0'
 ENDDATA;
-
-		$ftpOptions = $this->getFTPOptions();
 
 		if ($ftpOptions['enable'])
 		{
