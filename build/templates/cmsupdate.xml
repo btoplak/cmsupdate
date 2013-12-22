@@ -97,6 +97,7 @@
 			<filename>toolbar.php</filename>
 
 			<folder>controllers</folder>
+			<folder>elements</folder>
             <folder>lib</folder>
 			<folder>models</folder>
 			<folder>sql</folder>

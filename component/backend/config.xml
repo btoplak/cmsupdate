@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<config>
+<config addfieldpath="/administrator/components/com_cmsupdate/elements">
     <fieldset
             name="sources"
             label="COM_CMSUPDATE_CONFIG_SOURCES_LABEL"
@@ -49,6 +49,14 @@
                 length="4"
                 label="COM_CMSUPDATE_CONFIG_FREQUENCY_LABEL"
                 description="COM_CMSUPDATE_CONFIG_FREQUENCY_DESC"
+        />
+
+        <field
+                name="backupprofile"
+                type="akeebabackupprofiles"
+                default="1"
+                label="COM_CMSUPDATE_CONFIG_AKEEBABACKUPPROFILE_LABEL"
+                description="COM_CMSUPDATE_CONFIG_AKEEBABACKUPPROFILE_DESC"
         />
 
         <field name="updatecache" type="hidden" value="" />

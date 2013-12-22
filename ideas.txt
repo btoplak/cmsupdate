@@ -1,8 +1,5 @@
-one click action plugin
-	link with language strings
-
-backup before update with selected backup profile
-	choose the backup profile you want to use in the configuration
+cli
+	CLI script to auto upgrade Joomla!
 
 alternate download adapters
 	fopen
@@ -11,9 +8,6 @@ alternate download adapters
 dry run
 	Check if files/directories are writeable without writing any files to disk.
 	possibly do this automatically (via configuration) in gui and cli modes
-
-cli
-	CLI script to auto upgrade Joomla!
 
 remote upgrade CRON
 	it must not rely on the database or Joomla! classes being available.
@@ -39,3 +33,6 @@ DONE:
 √ ping restore.php
 	if that fails tell the user to check his .htaccess
 	if admin tools is installed, offer to add restore.php to .htaccess Maker and run .htaccess Maker
+
+√ backup before update with selected backup profile
+	choose the backup profile you want to use in the configuration
