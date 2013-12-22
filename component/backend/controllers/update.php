@@ -188,6 +188,7 @@ class CmsupdateControllerUpdate extends FOFController
 		// already expired.
 
 		$this->getThisModel()->finalize();
+		$this->getThisModel()->purgeJoomlaUpdateCache();
 
 		$this->setRedirect('index.php?option=com_cmsupdate&force=1');
 	}
