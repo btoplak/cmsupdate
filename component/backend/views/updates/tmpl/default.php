@@ -78,7 +78,7 @@ FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 			</div>
 		</div>
 		<?php endif;?>
-		<?php if (true || $this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass']))): ?>
+		<?php if ($this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass']))): ?>
 			<div class="control-group">
 				<label class="control-label" for="ftp_user">
 					<?php echo JText::_('COM_CMSUPDATE_UPDATES_LBL_UPDATEOPTIONS_FTPUSER') ?>
