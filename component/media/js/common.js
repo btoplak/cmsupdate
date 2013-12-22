@@ -668,7 +668,7 @@ cmsupdate.finalizeUpdate = function ()
     // Do AJAX post
     var post = { task : 'finalizeRestore', factory: cmsupdate.factory };
     cmsupdate.doEncryptedAjax(post, function(data){
-        window.location('index.php?option=com_cmsupdate&view=update&task=finalise');
+        window.location = 'index.php?option=com_cmsupdate&view=update&task=finalise';
     });
 }
 
