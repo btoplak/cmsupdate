@@ -1,5 +1,5 @@
-warn on downgrade
-	if a user tries to downgrade to a previous Joomla! version issue a warning
+one click action plugin
+	link with language strings
 
 backup before update with selected backup profile
 	choose the backup profile you want to use in the configuration
@@ -24,7 +24,8 @@ automatic update notifications
 	max notification frequency, e.g. every 24 hours
 	select emails to receive notification
 
-
+existing Joomla! version package by page scraping JoomlaCode.org
+	used to reinstall Joomla!
 
 
 DONE:
