@@ -20,6 +20,9 @@
 
 defined('_JEXEC') or die();
 
+/**
+ * A download adapter using the cURL PHP integration
+ */
 class AcuDownloadAdapterCurl extends AcuDownloadAdapterAbstract implements AcuDownloadInterface
 {
 	public function __construct()
