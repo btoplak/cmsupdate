@@ -523,8 +523,8 @@ cmsupdate.stepDownload = function(data)
         if(percent < 100)
         {
             // More work to do
-            doAjax(post, function(ret){
-                cmsupdate.startDownload(ret);
+            cmsupdate.doAjax(post, function(ret){
+                cmsupdate.stepDownload(ret);
             });
         } else {
             // Done!
