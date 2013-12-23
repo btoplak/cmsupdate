@@ -176,13 +176,13 @@ class AcuDownload
 			$start = $timer->getRunningTime(); // Mark the start of this download
 			$break = false; // Don't break the step
 
+			// Figure out where on Earth to put that file
+			$local_file = $tmpDir . '/' . $localFilename;
+
+			//debugMsg("- Importing from $filename");
+
 			while (($timer->getTimeLeft() > 0) && !$break)
 			{
-				// Figure out where on Earth to put that file
-				$local_file = $tmpDir . '/' . $localFilename;
-
-				//debugMsg("- Importing from $filename");
-
 				// Do we have to initialize the file?
 				if ($frag == -1)
 				{
@@ -248,16 +248,14 @@ class AcuDownload
 						// Since this is a staggered download, consider this normal and finish
 						$frag = -1;
 						//debugMsg("-- Import complete");
-						$doneSize = $totalSize;
+						$totalSize = $doneSize;
 						$break = true;
-						continue;
 					}
 				}
 
 				// Add the currently downloaded frag to the total size of downloaded files
 				if ($result)
 				{
-					clearstatcache();
 					$filesize = strlen($result);
 					//debugMsg("-- Successful download of $filesize bytes");
 					$doneSize += $filesize;
@@ -283,6 +281,15 @@ class AcuDownload
 					$frag++;
 
 					//debugMsg("-- Proceeding to next fragment, frag $frag");
+
+					if ($filesize < $length)
+					{
+						// A partial download means we are done
+						$frag = -1;
+						//debugMsg("-- Import complete (partial download of last frag)");
+						$totalSize = $doneSize;
+						$break = true;
+					}
 				}
 
 				// Advance the frag pointer and mark the end
