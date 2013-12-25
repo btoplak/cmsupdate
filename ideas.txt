@@ -1,17 +1,10 @@
-cli
-	CLI script to auto upgrade Joomla!
-
-alternate download adapters
-	fopen
-	fsockopen
+remote upgrade CRON
+	it must not rely on the database or Joomla! classes being available.
+	An interface to restore.php protected by a keyword?
 
 dry run
 	Check if files/directories are writeable without writing any files to disk.
 	possibly do this automatically (via configuration) in gui and cli modes
-
-remote upgrade CRON
-	it must not rely on the database or Joomla! classes being available.
-	An interface to restore.php protected by a keyword?
 
 automatic update notifications
 	CLI or plugin
@@ -20,6 +13,9 @@ automatic update notifications
 
 existing Joomla! version package by page scraping JoomlaCode.org
 	used to reinstall Joomla!
+
+alternate download adapters
+	fsockopen
 
 
 DONE:
@@ -36,3 +32,8 @@ DONE:
 
 √ backup before update with selected backup profile
 	choose the backup profile you want to use in the configuration
+
+√ alternate download adapters: fopen
+
+√ cli
+	CLI script to auto upgrade Joomla!

@@ -288,7 +288,12 @@ class CmsUpdateCli extends JApplicationCli
 
 		$this->out("Update found, Joomla! $newJoomlaVersion (source: $updateSource)");
 
-		// @todo Check FTP settings
+		// Check the FTP settings
+		$ftpOptions = $this->model->getFtpOptions();
+		if ($ftpOptions['enable'] && (empty($ftpOptions['user']) || empty($ftpOptions['pass'])))
+		{
+			throw new Exception('You have to enter your FTP username and password in your site\'s Global Configuration', 1);
+		}
 
 		// Download the update
 		$this->out('Preparing for download');
@@ -395,8 +400,12 @@ class CmsUpdateCli extends JApplicationCli
 	 */
 	public static function renderError(Exception $error)
 	{
-		exit($error->getMessage());
-		$app->close(0);
+		echo "\n" . str_repeat('*', 79) . "\nERROR" . str_repeat('*', 79) . "\n";
+		echo "An error occurred while processing Joomla! updates:\n\n";
+		echo $error->getMessage();
+		echo "\n\nThe update check has been cancelled.\n";
+
+		exit($error->getCode());
 	}
 }
 
