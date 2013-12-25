@@ -28,11 +28,12 @@ class CmsupdateViewUpdates extends FOFViewHtml
 
 		$force = $model->getState('force', 0);
 
-		$this->updateInfo 		= $model->getUpdateInfo($force);
-		$this->lastCheckHR 		= $model->getHumanReadableLastCheck();
-		$this->hasAkeebaBackup 	= $model->hasAkeebaBackup();
-		$this->ftpOptions		= $model->getFTPOptions();
-		$this->needsConfig		= $this->hasAkeebaBackup || ($this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass'])));
+		$this->updateInfo 			= $model->getUpdateInfo($force);
+		$this->lastCheckHR 			= $model->getHumanReadableLastCheck();
+		$this->hasAkeebaBackup 		= $model->hasAkeebaBackup();
+		$this->ftpOptions			= $model->getFTPOptions();
+		$this->needsConfig			= $this->hasAkeebaBackup || ($this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass'])));
+		$this->hasBackupOnUpdate	= $model->hasBackupOnUpdate();
 
 		return true;
 	}

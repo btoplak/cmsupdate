@@ -341,6 +341,32 @@ class CmsupdateModelUpdates extends FOFModel
 	}
 
 	/**
+	 * Should we attempt to backup on update?
+	 *
+	 * @return  boolean  True if we do have to backup on update
+	 */
+	public function hasBackupOnUpdate()
+	{
+		if (!$this->hasAkeebaBackup())
+		{
+			return false;
+		}
+
+		JLoader::import('cms.component.helper');
+		$params = JComponentHelper::getParams('com_cmsupdate');
+
+		return $params->get('backuponupdate', 1);
+	}
+
+	public function getBackupProfile()
+	{
+		JLoader::import('cms.component.helper');
+		$params = JComponentHelper::getParams('com_cmsupdate');
+
+		return $params->get('backupprofile', 1);
+	}
+
+	/**
 	 * Checks if the site has Admin Tools installed
 	 *
 	 * @return  boolean  True if Admin Tools is installed and enabled
@@ -850,7 +876,10 @@ ENDDATA;
 			$this->recursive_remove_directory($tempdir . '/cmsupdate');
 		}
 
-		$this->runUpdateScripts();
+		if ($runUpdateScripts)
+		{
+			$this->runUpdateScripts();
+		}
 	}
 
 	/**

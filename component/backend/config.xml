@@ -52,12 +52,24 @@
         />
 
         <field
+                name="backuponupdate"
+                type="radio"
+                default="1"
+                label="COM_CMSUPDATE_CONFIG_BACKUPONUPDATE_LABEL"
+                description="COM_CMSUPDATE_CONFIG_BACKUPONUPDATE_DESC"
+                class="btn-group"
+            >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+            </field>
+
+        <field
                 name="backupprofile"
                 type="akeebabackupprofiles"
                 default="1"
                 label="COM_CMSUPDATE_CONFIG_AKEEBABACKUPPROFILE_LABEL"
                 description="COM_CMSUPDATE_CONFIG_AKEEBABACKUPPROFILE_DESC"
-        />
+                />
 
         <field name="updatecache" type="hidden" value="" />
 

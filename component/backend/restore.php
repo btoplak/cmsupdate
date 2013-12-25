@@ -58,10 +58,13 @@ if (!function_exists('fnmatch')) {
 }
 
 // Unicode-safe binary data length function
-if(function_exists('mb_strlen')) {
-	function akstringlen($string) { return mb_strlen($string,'8bit'); }
-} else {
-	function akstringlen($string) { return strlen($string); }
+if (!function_exists('akstringlen'))
+{
+	if(function_exists('mb_strlen')) {
+		function akstringlen($string) { return mb_strlen($string,'8bit'); }
+	} else {
+		function akstringlen($string) { return strlen($string); }
+	}
 }
 
 /**
@@ -3419,7 +3422,6 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		return $ret;
 	}
 }
-
 
 /**
  * Akeeba Restore

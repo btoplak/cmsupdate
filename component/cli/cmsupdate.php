@@ -24,6 +24,9 @@ define('DS', DIRECTORY_SEPARATOR);
 // Required by restore.php to let us handle extraction manually
 define('KICKSTART', 1);
 
+// Enable Akeeba Engine, required for the backup on update feature
+define('AKEEBAENGINE', 1);
+
 // Required to include Joomla! core files
 define('_JEXEC', 1);
 
@@ -210,7 +213,12 @@ class CmsUpdateCli extends JApplicationCli
 	 */
 	public function execute()
 	{
-		set_exception_handler(array(__CLASS__, 'renderError'));
+		// Set our own exceptions handler
+		restore_exception_handler();
+		//set_exception_handler(array(__CLASS__, 'renderError'));
+
+		// Required when finalising the update
+		define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_cmsupdate');
 
 		// Set all errors to output the messages to the console, in order to
 		// avoid infinite loops in JError ;)
@@ -222,14 +230,11 @@ class CmsUpdateCli extends JApplicationCli
 		// Required by Joomla!
 		JLoader::import('joomla.environment.request');
 
-		// Set the root path to CMS Update
-		define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_cmsupdate');
-
 		// Load FOF
 		JLoader::import('fof.include');
 
 		// Load the ACU autoloader
-		require_once JPATH_COMPONENT_ADMINISTRATOR . '/lib/autoloader.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_cmsupdate/lib/autoloader.php';
 		AcuAutoloader::init();
 
 		// Load the language files
@@ -288,11 +293,38 @@ class CmsUpdateCli extends JApplicationCli
 
 		$this->out("Update found, Joomla! $newJoomlaVersion (source: $updateSource)");
 
+		$this->newJoomlaVersion = $newJoomlaVersion;
+
 		// Check the FTP settings
 		$ftpOptions = $this->model->getFtpOptions();
 		if ($ftpOptions['enable'] && (empty($ftpOptions['user']) || empty($ftpOptions['pass'])))
 		{
 			throw new Exception('You have to enter your FTP username and password in your site\'s Global Configuration', 1);
+		}
+
+		// Backup before update
+		if ($this->model->hasAkeebaBackup() && $this->model->hasBackupOnUpdate())
+		{
+			// DO NOT REMOVE! We have to preload JTableExtension to prevent it
+			// from throwing an exception after backup
+			$dummy = JTable::getInstance('extension');
+
+			$input = clone $this->input;
+			$model = clone $this->model;
+
+			$this->_backupOnUpdate();
+
+			$this->input = clone $input;
+			$this->model = clone $model;
+
+			unset($input);
+			unset($model);
+
+			$db = JFactory::getDbo();
+			if (!$db->connected())
+			{
+				$db->connect();
+			}
 		}
 
 		// Download the update
@@ -301,8 +333,6 @@ class CmsUpdateCli extends JApplicationCli
 		$this->model->prepareDownload();
 		$this->out('Downloading');
 		$this->model->stepDownload(false);
-
-		// @todo Backup before update
 
 		// Extract the update file
 		$this->_extract();
@@ -333,7 +363,7 @@ class CmsUpdateCli extends JApplicationCli
 
 		$this->model->createRestorationINI();
 
-		require_once JPATH_COMPONENT_ADMINISTRATOR . '/restoration.php';
+		require_once JPATH_ADMINISTRATOR . '/components/com_cmsupdate/restoration.php';
 
 		$overrides = array(
 			'rename_files'	 => array('.htaccess' => 'htaccess.bak'),
@@ -372,6 +402,209 @@ class CmsUpdateCli extends JApplicationCli
 		}
 
 		return true;
+	}
+
+	private function _backupOnUpdate()
+	{
+		$profile = $this->model->getBackupProfile();
+
+		if ($profile <= 0)
+		{
+			$profile = 1;
+		}
+
+		// Load the language files
+		$paths	 = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
+		$jlang	 = JFactory::getLanguage();
+		$jlang->load('com_akeeba', $paths[0], 'en-GB', true);
+		$jlang->load('com_akeeba', $paths[1], 'en-GB', true);
+		$jlang->load('com_akeeba' . '.override', $paths[0], 'en-GB', true);
+		$jlang->load('com_akeeba' . '.override', $paths[1], 'en-GB', true);
+
+		// Load Akeeba Backup's version file
+		require_once JPATH_ADMINISTRATOR . '/components/com_akeeba/version.php';
+
+		$version		 = AKEEBA_VERSION;
+		$date			 = AKEEBA_DATE;
+		$start_backup	 = time();
+
+		$phpversion		 = PHP_VERSION;
+		$phpenvironment	 = PHP_SAPI;
+		$phpos			 = PHP_OS;
+
+		echo <<<ENDBLOCK
+Backing up before update
+    Akeeba Backup $version ($date)
+    ---------------------------------------------------------------------------
+    Akeeba Backup is Free Software, distributed under the terms of the GNU
+    General Public License version 3 or, at your option, any later version.
+    This program comes with ABSOLUTELY NO WARRANTY as per sections 15 & 16 of
+    the license. See http://www.gnu.org/licenses/gpl-3.0.html for details.
+    ---------------------------------------------------------------------------
+    You are using PHP $phpversion ($phpenvironment) on $phpos
+
+    Starting a new backup with the following parameters:
+        Profile ID  $profile
+
+ENDBLOCK;
+
+		// Attempt to use an infinite time limit, in case you are using the PHP CGI binary instead
+		// of the PHP CLI binary. This will not work with Safe Mode, though.
+		$safe_mode = true;
+		if (function_exists('ini_get'))
+		{
+			$safe_mode = ini_get('safe_mode');
+		}
+		if (!$safe_mode && function_exists('set_time_limit'))
+		{
+			echo "    Unsetting time limit restrictions.\n";
+			@set_time_limit(0);
+		}
+		elseif (!$safe_mode)
+		{
+			echo "    Could not unset time limit restrictions; you may get a timeout error\n";
+		}
+		else
+		{
+			echo "    You are using PHP's Safe Mode; you may get a timeout error\n";
+		}
+		echo "\n";
+
+		// Log some paths
+		echo "    Site paths determined by this script:\n";
+		echo "        JPATH_BASE : " . JPATH_BASE . "\n";
+		echo "        JPATH_ADMINISTRATOR : " . JPATH_ADMINISTRATOR . "\n\n";
+
+		// Load the engine
+		$factoryPath = JPATH_ADMINISTRATOR . '/components/com_akeeba/akeeba/factory.php';
+		define('AKEEBAROOT', JPATH_ADMINISTRATOR . '/components/com_akeeba/akeeba');
+
+		if (!file_exists($factoryPath))
+		{
+			echo "ERROR!\n";
+			echo "Could not load the backup engine; file does not exist. Technical information:\n";
+			echo "Path to " . basename(__FILE__) . ": " . __DIR__ . "\n";
+			echo "Path to factory file: $factoryPath\n";
+			die("\n");
+		}
+		else
+		{
+			try
+			{
+				require_once $factoryPath;
+			}
+			catch (Exception $e)
+			{
+				echo "ERROR!\n";
+				echo "Backup engine returned an error. Technical information:\n";
+				echo "Error message:\n\n";
+				echo $e->getMessage() . "\n\n";
+				echo "Path to " . basename(__FILE__) . ":" . __DIR__ . "\n";
+				echo "Path to factory file: $factoryPath\n";
+				die("\n");
+			}
+		}
+
+		// Forced CLI mode settings
+		define('AKEEBA_PROFILE', $profile);
+		define('AKEEBA_BACKUP_ORIGIN', 'cli');
+
+		// Force loading CLI-mode translation class
+		$dummy = new AEUtilTranslate;
+
+		// Load the profile
+		AEPlatform::getInstance()->load_configuration($profile);
+
+		// Reset Kettenrad and its storage
+		AECoreKettenrad::reset(array(
+									'maxrun' => 0
+							   ));
+		AEUtilTempvars::reset(AKEEBA_BACKUP_ORIGIN);
+
+		// Setup
+		$kettenrad	 = AEFactory::getKettenrad();
+		$options	 = array(
+			'description'	 => 'Backup before updating to Joomla! ' . $this->newJoomlaVersion . ' (automatic update)',
+			'comment'		 => ''
+		);
+
+		$kettenrad->setup($options);
+
+		// Dummy array so that the loop iterates once
+		$array = array(
+			'HasRun' => 0,
+			'Error'	 => ''
+		);
+
+		$warnings_flag = false;
+
+		$this->out('    Starting backup');
+		$this->out('');
+
+		while (($array['HasRun'] != 1) && (empty($array['Error'])))
+		{
+			// Recycle the database connection to minimise problems with database timeouts
+			$db = AEFactory::getDatabase();
+			$db->close();
+			$db->open();
+
+			AEUtilLogger::openLog(AKEEBA_BACKUP_ORIGIN);
+			AEUtilLogger::WriteLog(true, '');
+
+			// Apply engine optimization overrides
+			$config = AEFactory::getConfiguration();
+			$config->set('akeeba.tuning.min_exec_time', 0);
+			$config->set('akeeba.tuning.nobreak.beforelargefile', 1);
+			$config->set('akeeba.tuning.nobreak.afterlargefile', 1);
+			$config->set('akeeba.tuning.nobreak.proactive', 1);
+			$config->set('akeeba.tuning.nobreak.finalization', 1);
+			$config->set('akeeba.tuning.settimelimit', 0);
+			$config->set('akeeba.tuning.nobreak.domains', 0);
+
+			$kettenrad->tick();
+			AEFactory::getTimer()->resetTime();
+			$array		 = $kettenrad->getStatusArray();
+			AEUtilLogger::closeLog();
+			$time		 = date('Y-m-d H:i:s \G\M\TO (T)');
+
+			$warnings		 = "no warnings issued (good)";
+			$stepWarnings	 = false;
+			if (!empty($array['Warnings']))
+			{
+				$warnings_flag	 = true;
+				$warnings		 = "POTENTIAL PROBLEMS DETECTED; " . count($array['Warnings']) . " warnings issued (see below).\n";
+				foreach ($array['Warnings'] as $line)
+				{
+					$warnings .= "\t$line\n";
+				}
+				$stepWarnings = true;
+				$kettenrad->resetWarnings();
+			}
+
+			echo <<<ENDSTEPINFO
+    Last Tick   : $time
+    Domain      : {$array['Domain']}
+    Step        : {$array['Step']}
+    Substep     : {$array['Substep']}
+    Warnings    : $warnings
+
+
+ENDSTEPINFO;
+		}
+
+		// Clean up
+		AEUtilTempvars::reset(AKEEBA_BACKUP_ORIGIN);
+
+		if (!empty($array['Error']))
+		{
+			throw new Exception($array['Error'], 2);
+		}
+		else
+		{
+			$this->out('Backup before update completed successfully.');
+			$this->out('Peak memory usage: ' . $this->peakMemUsage());
+			$this->out('Proceeding with update.');
+		}
 	}
 
 	/**

@@ -17,6 +17,10 @@ existing Joomla! version package by page scraping JoomlaCode.org
 alternate download adapters
 	fsockopen
 
+pre- and post- update events
+	use event onBeforeCmsUpdate and onAfterCmsUpdate
+	scan all extensions folders for a file named cmsupdate_events.php and import them
+	 these files contain JPlugin instances implementing either or both events
 
 DONE:
 

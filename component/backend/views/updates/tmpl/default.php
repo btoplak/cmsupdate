@@ -70,9 +70,9 @@ FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 			</label>
 			<div class="control-group">
 				<div class="btn-group radio btn-group-yesno">
-					<input type="radio" id="backupOnUpdateYes" name="backupOnUpdate" value="1" checked="checked" class="btn active btn-success" />
+					<input type="radio" id="backupOnUpdateYes" name="backupOnUpdate" value="1" <?php echo $this->hasBackupOnUpdate ? 'checked="checked"' : '' ?> class="btn active btn-success" />
 					<label for="backupOnUpdateYes"><?php echo JText::_('JYES') ?></label>
-					<input type="radio" id="backupOnUpdateNo" name="backupOnUpdate" value="0" class="btn" />
+					<input type="radio" id="backupOnUpdateNo" name="backupOnUpdate" value="0" <?php echo $this->hasBackupOnUpdate ? '' : 'checked="checked"' ?> class="btn" />
 					<label for="backupOnUpdateNo"><?php echo JText::_('JNO') ?></label>
 				</div>
 			</div>
