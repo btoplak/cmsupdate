@@ -393,8 +393,15 @@ class CmsupdateModelUpdates extends FOFModel
 		}
 
 		// This trick forces the downloadurl variable to persist in the session
-		JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', $update['package']);
-		$dummy = $this->downloadurl;
+		if (!FOFPlatform::getInstance()->isCli())
+		{
+			JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', $update['package']);
+			$dummy = $this->downloadurl;
+		}
+		else
+		{
+			$this->downloadurl = $update['package'];
+		}
 	}
 
 	/**
@@ -505,9 +512,10 @@ class CmsupdateModelUpdates extends FOFModel
 			'doneSize'  => $this->getState('doneSize', -1),
 		);
 
+		$download = new AcuDownload();
+
 		if ($staggered)
 		{
-			$download = new AcuDownload();
 			$retArray = $download->importFromURL($params);
 		}
 		else
@@ -523,7 +531,7 @@ class CmsupdateModelUpdates extends FOFModel
 
 			try
 			{
-				$result = $this->adapter->downloadAndReturn($params['file']);
+				$result = $download->getFromURL($params['file']);
 
 				if ($result === false)
 				{
@@ -797,9 +805,11 @@ ENDDATA;
 	/**
 	 * Post-update clean up
 	 *
+	 * @param   boolean  $runUpdateScripts  Should I run the update scripts? Default: true
+	 *
 	 * @return  void
 	 */
-	public function finalize()
+	public function finalize($runUpdateScripts = true)
 	{
 		JLoader::import('joomla.filesystem.file');
 		JLoader::import('joomla.filesystem.folder');
@@ -911,7 +921,7 @@ ENDDATA;
 	 *
 	 * @return  boolean  True on success
 	 */
-	private function runUpdateScripts()
+	public function runUpdateScripts()
 	{
 		JLoader::import('joomla.installer.install');
 		$installer = JInstaller::getInstance();
