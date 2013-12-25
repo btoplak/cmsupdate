@@ -18,7 +18,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
 // Uncomment the following line to enable debug mode
 // define('CMSUPDATEDEBUG',1);

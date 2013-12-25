@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="quickicon" method="upgrade">
+    <name>PLG_QUICKICON_CMSUPDATE</name>
+    <author>Nicholas K. Dionysopoulos / AkeebaBackup.com</author>
+    <authorEmail>nicholas@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2013 Nicholas K. Dionysopoulos</copyright>
+    <license>GNU General Public License version 3, or later</license>
+    <creationDate>2013-12-25</creationDate>
+    <version>1.0</version>
+    <description>PLG_QUICKICON_CMSUPDATE_XML_DESCRIPTION</description>
+    <files>
+        <filename plugin="cmsupdate">cmsupdate.php</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_quickicon_cmsupdate.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_quickicon_cmsupdate.sys.ini</language>
+    </languages>
+</extension>

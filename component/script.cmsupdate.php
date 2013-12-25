@@ -44,7 +44,7 @@ class Com_CmsupdateInstallerScript
 				'cmsupdateemail'		=> 1,
 			),
 			'quickicon' => array(
-				//'something'	=> 0
+				'cmsupdate'				=> 1,
 			),
 
 		)
