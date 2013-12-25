@@ -67,15 +67,17 @@ class Com_CmsupdateInstallerScript
 	);
 
 	private $akeebaCliScripts = array(
-		//'something.php',
+		'cmsupdate.php',
 	);
 
 
 	/**
 	 * Joomla! pre-flight event
 	 *
-	 * @param string $type Installation type (install, update, discover_install)
-	 * @param JInstaller $parent Parent object
+	 * @param   string      $type    Installation type (install, update, discover_install)
+	 * @param   JInstaller  $parent  Parent installer object
+	 *
+	 * @return  boolean  True to allow the installation to proceed
 	 */
 	public function preflight($type, $parent)
 	{
