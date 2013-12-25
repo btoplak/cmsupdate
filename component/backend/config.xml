@@ -52,6 +52,24 @@
         />
 
         <field
+                name="emailfrequency"
+                type="text"
+                default="168"
+                length="4"
+                label="COM_CMSUPDATE_CONFIG_EMAILFREQUENCY_LABEL"
+                description="COM_CMSUPDATE_CONFIG_EMAILFREQUENCY_DESC"
+        />
+
+        <field
+                name="email"
+                type="text"
+                default=""
+                length="60"
+                label="COM_CMSUPDATE_CONFIG_EMAIL_LABEL"
+                description="COM_CMSUPDATE_CONFIG_EMAIL_DESC"
+        />
+
+        <field
                 name="backuponupdate"
                 type="radio"
                 default="1"
@@ -73,7 +91,9 @@
 
         <field name="updatecache" type="hidden" value="" />
 
-        <field name="lastcheck" type="hidden" value="" />
+        <field name="lastcheck" type="hidden" value="0" />
+
+        <field name="lastemail" type="hidden" value="0" />
 
     </fieldset>
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5.0" type="plugin" group="system" method="upgrade">
+    <name>PLG_CMSUPDATEEMAIL</name>
+    <author>Nicholas K. Dionysopoulos / AkeebaBackup.com</author>
+    <authorEmail>nicholas@akeebabackup.com</authorEmail>
+    <authorUrl>https://www.akeebabackup.com</authorUrl>
+    <copyright>Copyright (c)2013 Nicholas K. Dionysopoulos</copyright>
+    <license>GNU General Public License version 3, or later</license>
+    <creationDate>2013-12-25</creationDate>
+    <version>1.0</version>
+    <description>PLG_CMSUPDATEEMAIL_XML_DESCRIPTION</description>
+    <files>
+        <filename plugin="cmsupdateemail">cmsupdateemail.php</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_system_cmsupdateemail.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_system_cmsupdateemail.sys.ini</language>
+    </languages>
+</extension>

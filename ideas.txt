@@ -1,26 +1,28 @@
-remote upgrade CRON
+pre- and post- update events
+	use event onBeforeCmsUpdate and onAfterCmsUpdate
+	scan all extensions folders for a file named cmsupdate_events.php and import them
+	 these files contain JPlugin instances implementing either or both events
+
+quickicon plugin to show CMS updates
+
+remote upgrade CRON script
 	it must not rely on the database or Joomla! classes being available.
 	An interface to restore.php protected by a keyword?
+
+existing Joomla! version package by page scraping JoomlaCode.org
+	used to reinstall Joomla!
+
+option to manually run post-update scripts
+	a button to run the update finalisation scripts, in case crap happened
 
 dry run
 	Check if files/directories are writeable without writing any files to disk.
 	possibly do this automatically (via configuration) in gui and cli modes
 
-automatic update notifications
-	CLI or plugin
-	max notification frequency, e.g. every 24 hours
-	select emails to receive notification
-
-existing Joomla! version package by page scraping JoomlaCode.org
-	used to reinstall Joomla!
-
 alternate download adapters
 	fsockopen
 
-pre- and post- update events
-	use event onBeforeCmsUpdate and onAfterCmsUpdate
-	scan all extensions folders for a file named cmsupdate_events.php and import them
-	 these files contain JPlugin instances implementing either or both events
+CLI script for update emails
 
 DONE:
 
@@ -41,3 +43,7 @@ DONE:
 
 √ cli
 	CLI script to auto upgrade Joomla!
+
+√ automatic update notifications
+	max notification frequency, e.g. every 24 hours
+	select emails to receive notification

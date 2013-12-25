@@ -40,8 +40,8 @@ class Com_CmsupdateInstallerScript
 		// plugins => { (folder) => { (element) => (published) }* }*
 		'plugins' => array(
 			'system' => array(
-				//'something'			=> 1,
-				'oneclickaction'		=> 0,
+				'oneclickaction'		=> 1,
+				'cmsupdateemail'		=> 1,
 			),
 			'quickicon' => array(
 				//'something'	=> 0
