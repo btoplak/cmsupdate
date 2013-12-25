@@ -24,7 +24,7 @@ class CmsupdateToolbar extends FOFToolbar
 {
 	public function onUpdates()
 	{
-		$this->renderSubmenu();
+		// $this->renderSubmenu();
 
 		// Set toolbar title
 		JToolBarHelper::title(JText::_('COM_CMSUPDATE'));
