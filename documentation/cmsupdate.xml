@@ -19,6 +19,12 @@
 
     <pubdate>December 2013</pubdate>
 
+    <copyright>
+      <year>2013</year>
+
+      <holder>Akeeba Ltd</holder>
+    </copyright>
+
     <legalnotice>
       <para>Permission is granted to copy, distribute and/or modify this
       document under the terms of the GNU Free Documentation License, Version
@@ -395,7 +401,17 @@
       <para>The first thing you see is the backup status pane. It's green when
       your site is up to date, red when an update is available. It informs you
       of the currently installed Joomla! version and the available updated
-      version (if one is available).</para>
+      version (if one is available). If an update is available you are also
+      shown the download URL of the update package, in case you need to
+      download and install it manually.</para>
+
+      <tip>
+        <para>A little known fact is that Joomla! updates can be always
+        installed manually, just like any other Joomla! extension. Just go to
+        Extensions, Manage Extensions and use the Install from Package (on
+        some Joomla! versions: Upload and Install) to install the update ZIP
+        file as you would with a component, plugin, module or template.</para>
+      </tip>
 
       <para>Right below it you can find the <guilabel>Update
       Options</guilabel> pane. In here you can define the following setting
@@ -535,6 +551,33 @@
       <para>You can change which versions appear here and which of these
       versions is reported as an available update in the <link
       linkend="options-page">Options page</link>.</para>
+
+      <para>Next to each version you are presented with three buttons:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><guibutton>Install Joomla! x.y.z</guibutton>. Installs the
+          specified Joomla! version on your site. Usually you will need to do
+          that when updating to a different version branch or when installing
+          a test / dev release.</para>
+        </listitem>
+
+        <listitem>
+          <para><guibutton>Download</guibutton>. Download the update package
+          to your computer. You can then install it just like any other
+          extension on your site. See the tip earlier in this chapter.</para>
+        </listitem>
+
+        <listitem>
+          <para><guibutton>Information</guibutton>. Opens a new window with
+          the information URL specified by the update server. Currently, all
+          Joomla! versions seem to link to http://www.joomla.org which is
+          really confusing. We suggest visiting
+          http://www.joomla.org/download.html and click on the tiny Release
+          Notes link right below the humongous download button for the version
+          you are interested in.</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section xml:id="options-page">
@@ -771,26 +814,349 @@
     <section xml:id="update-process">
       <title>The update process</title>
 
-      <para/>
+      <para>Once you click on an update button the update process begins. From
+      this point you don't need to do anything. Just sit back, do not close
+      the browser tab / window / app and do not let your device go to sleep or
+      disconnect from the Internet. The three steps of the update process are
+      performed automatically.</para>
+
+      <bridgehead>Step 1 - Download</bridgehead>
+
+      <screenshot>
+        <info>
+          <title>Downloading the update</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/03.png" scalefit="1" width="14cm"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>The first thing Akeeba CMS Update does is download the update
+      package from the update server into your site's temp-folder. The only
+      precondition is that this folder must be writeable (recommended) or
+      inside your site's main directory, writeable by FTP and you have enabled
+      and configure the FTP option in Joomla!'s Global Configuration page. If
+      these conditions are not met you will be told to do so and the update
+      will halt.</para>
+
+      <para>The download of the update file is segmented by default. This
+      means that Akeeba CMS Update will download it up to 1Mb at a time,
+      making sure that the download process doesn't time out. This uses the
+      same tried and tested technology used in our acclaimed Akeeba Kickstart
+      Professional software. The progress of the download is displayed on your
+      screen every 1-10 seconds (depending on the speed of your server and
+      network conditions).</para>
+
+      <bridgehead>Step 2 - Backing up your site (OPTIONAL!)</bridgehead>
+
+      <screenshot>
+        <info>
+          <title>Backing up your site before update</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/04.png" scalefit="1" width="14cm"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>If you have enabled the backup on update feature, a backup of your
+      site is taken using Akeeba Backup as soon as the update package is
+      downloaded. Once the backup is complete you will be taken back to Akeeba
+      CMS Update to complete the update installation.</para>
+
+      <important>
+        <para>If the backup fails for any reason the update will NOT take
+        place. However, if the backup succeeds but transferring it to a remote
+        storage fails the update WILL take place nevertheless.</para>
+      </important>
+
+      <bridgehead>Step 3 - Extracting the update, finalisation and
+      cleanup</bridgehead>
+
+      <screenshot>
+        <info>
+          <title>Extracting the update</title>
+        </info>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/05.png" scalefit="1" width="14cm"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>When the upload (and backup, if the backup on update feature is
+      enabled) is complete Akeeba CMS Update will begin extracting the update
+      package on your site. This step uses the same technology used in our
+      acclaimed Akeeba Kickstart Professional software (also used by Joomla!
+      Update). Unlike Joomla! Update, if you have enabled the FTP options in
+      your site's Global Configuration, Akeeba CMS Update will use the Hybrid
+      restoration mode which is more efficient in dealing with shared hosting
+      environments.</para>
+
+      <para>If the extraction cannot proceed (i.e. you have permissions
+      issues) it will halt and remind you to enable the FTP options in
+      Joomla!'s Global Configuration page.</para>
+
+      <para>After the extraction reaches 100% Akeeba CMS Update will perform
+      the update finalisation and clean up. This happens transparently and
+      takes 2-15 seconds. Finally you will be taken back to the component's
+      main page where you will see that you have the latest version of Joomla!
+      installed.</para>
     </section>
 
     <section xml:id="update-emails">
       <title>Update notification emails</title>
 
-      <para/>
+      <para>Installing Joomla! updates easily is great... but how do you know
+      there is an update available in the first place? One way is to log in to
+      your site and go to Components, Akeeba CMS Update. But if you have to do
+      that every day it's tedious. If you have to do that every day for dozens
+      of sites it's nothing but a waste of time. The answer to that is the
+      <guilabel>System - CMS Update Email</guilabel> plugin.</para>
+
+      <para>This plugin is running on your site and checks for new Joomla!
+      updates based on the update frequency you have specified in the
+      component's configuration. When there is an update available it will
+      email the Super Users of your site notifying them of the update. The
+      email contains a unique URL which will attempt to automatically log you
+      in to your site and let you click on the Update button to complete the
+      update. The link is valid only for 24 hours or a single use, whichever
+      comes first. Moreover, if there are multiple Super Users on your site,
+      as soon as one of them clicks on their link then all update links sent
+      out to the other Super Users are immediately disabled, minimising any
+      security concerns.</para>
+
+      <warning>
+        <para>We strongly advise you to use this feature ONLY if all of the
+        Super Users being notified access their email accounts in a secure
+        way, i.e. through an HTTPS-enabled webmail system or through a POP or
+        IMAP server which uses encrypted connections. As always, please
+        remember that emails are a rather weak transport, meaning that email
+        messages can be intercepted. Make sure you fully understand these
+        risks before using this feature.</para>
+      </warning>
+
+      <para>Sometimes you do not want all Super Users to be notified. For
+      example, if you are managing a site on behalf of your client –who is
+      also a Super User on the site– you probably want these notifications to
+      reach you and not your client, to avoid confusion. In this case you can
+      give a comma-separated list of email addresses in the component's
+      configuration (not the plugin's configuration – there are no
+      configuration options in the plugin). Please refer to the <link
+      linkend="options-page">Options page</link>.</para>
+
+      <para>Finally, in the <link linkend="options-page">Options page</link>
+      of the component you can also specify the maximum frequency of these
+      emails. Having your sites email you several times a day about available
+      updates is rarely fun, especially if you have dozens of sites which need
+      some work to ensure smooth upgrades or when you are on holidays when a
+      new Joomla! update is released. The default setting is to receive at
+      most one update email every week.</para>
+
+      <bridgehead>When are the update emails sent out?</bridgehead>
+
+      <para>Before answering this question you need an overview of how this
+      feature works. The <guilabel>System - CMS Update Email</guilabel> plugin
+      is a Joomla! system plugin. Whenever Joomla! is asked to create a
+      response (usually: showing a page to a user) this plugin is executed.
+      If, however, you are using a CDN, reverse proxy server (e.g. Varnish
+      cache, NginX in reverse proxy mode) or have enabled Joomla!'s cache it
+      is possible that the plugin IS NOT executed every time a page on your
+      site loads. Moreover, not every execution of the plugin leads to an
+      update check being made. There is exactly a 50% chance of this
+      happening, to prevent race conditions (receiving multiple emails when
+      you have lots of traffic on your site).</para>
+
+      <para>Moreover it is not necessary that Akeeba CMS Update will see a
+      Joomla! update the minute it is released and notify you about it. Update
+      results are cached for at least as much as the specified update
+      frequency in the Options page. With the default setting of 6 hours it
+      may take about a day for low traffic web sites to "see" the update and
+      send you an email.</para>
+
+      <para>As a result it's impossible to answer exactly when an email is
+      sent out. As a rule of thumb, you need at least 10 page views every day
+      for an email to be generated. On some sites with heavy use of caching,
+      CDNs and so on you may need substantially more page views, somewhere in
+      the area of 1000 page views. If you want an immediate notification of
+      when a new Joomla! version is released we strongly recommend you to
+      follow the @joomla Twitter account.</para>
+
+      <bridgehead>Privacy concerns</bridgehead>
+
+      <para>This feature was built with privacy and convenience in mind.
+      Neither the Joomla! project nor Akeeba Ltd collect any information about
+      your site, such as site name, site URL, Joomla! version, or Super User
+      email addresses. The notification feature runs entirely out of your own
+      site. The emails are sent through the email server you've specified in
+      your site, too. Even when checking for updates, your personally
+      identifiable information and the currently installed Joomla! version are
+      not disclosed to the Joomla! project. Only your server's IP address is
+      disclosed, but this cannot be avoided (it's just how the web
+      works).</para>
+
+      <para>Consider that when comparing Akeeba CMS Update, an Open Source
+      software package running on your own site, against third party,
+      proprietary, site monitoring services. With third party services you
+      have to disclose all of your personal and site information to a third
+      party, with obvious privacy implications. With Akeeba CMS Update you
+      disclose nothing at all. In an era of increased surveillance we strongly
+      believe that Open Source software puts you back in control of your
+      privacy and <emphasis>that</emphasis> is why we build this software and
+      give it away for free.</para>
     </section>
 
     <section xml:id="update-quickicon-plugin">
       <title>Update notification plugin for your Control Panel</title>
 
-      <para/>
+      <para>Installing Joomla! updates easily is great... but how do you know
+      there is an update available in the first place? One way is to log in to
+      your site and go to Components, Akeeba CMS Update. But this is tedious.
+      On many sites you have the Super Users logging in very frequently,
+      perhaps several times a day, to the site's administrator back-end. This
+      is where the <guilabel>Quick Icon - Akeeba CMS Update notification for
+      Joomla! updates</guilabel> plugin.</para>
+
+      <para>This plugin works in the same way the <guilabel>Quick Icon -
+      Joomla! Update Notification</guilabel> plugin that I wrote back in the
+      Joomla! 1.7 days and still ships with Joomla! works. It will present an
+      update notification for Joomla! in your Joomla! Control Panel page. It
+      is advised to disable the <guilabel>Quick Icon - Joomla! Update
+      Notification</guilabel> plugin when you enable the <guilabel>Quick Icon
+      - Akeeba CMS Update notification for Joomla! updates</guilabel> plugin
+      to prevent confusion.</para>
     </section>
 
     <section xml:id="autoupdate-cron">
       <title>The automatic update CRON script</title>
 
-      <para/>
+      <para>Being notified on updates is great, but it still requires you to
+      manually install the update (even though it takes 10 seconds of your
+      time per site). Sometimes it's desirable to automatically perform the
+      update. This is where the automatic update CRON script comes into play,
+      allowing you to create CRON jobs which automatically update Joomla!
+      without any human interraction.</para>
+
+      <warning>
+        <para>THERE BE DRAGONS. Automatic updates are extremely convenient as
+        they are dangerous. It is possible that a new Joomla! version contains
+        some bug or some backwards incompatible change which can bring your
+        site down. This is especially true when you are upgrading to a
+        different version Joomla! branch than the one currently installed on
+        your site. We STRONGLY advise AGAINST automatic updates to anything
+        except current branch releases. In all other cases you are advised to
+        first try applying the update on a test site first.</para>
+      </warning>
+
+      <para>In order to schedule an automatic Joomla! update check and update
+      installation, you will have to use the following command line to your
+      host's CRON interface:</para>
+
+      <programlisting><replaceable>/usr/local/bin/php</replaceable> <replaceable>/home/USER/webroot</replaceable>/cli/cmsupdate.php</programlisting>
+
+      <para>where <replaceable>/usr/local/bin/php</replaceable> is the path to
+      your PHP CLI executable and
+      <replaceable>/home/USER/webroot</replaceable> is the absolute path to
+      your web site's root. You can get this information from your
+      host.</para>
+
+      <para>For example, assuming that your PHP CLI binary is located in
+      <filename>/usr/local/bin/php</filename> - a common setting among hosts -
+      and that your web site's root is located at
+      <filename>/home/johndoe/httpdocs</filename> you would need to use the
+      following command line in your CRON setup:</para>
+
+      <programlisting>/usr/local/bin/php /home/johndoe/httpdocs/cli/cmsupdate.php</programlisting>
+
+      <para>Special considerations:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Most hosts do not impose a time limit on scripts running from
+          the command-line. If your host does and the limit is less than the
+          required time to perform the update, the update will fail and you
+          will end up with a broken site.</para>
+        </listitem>
+
+        <listitem>
+          <para>This script is not meant to run from a web interface. If your
+          host only provides access to the CGI or FastCGI PHP binaries,
+          <filename>cmsupdate.php</filename> will not work with them. The
+          solution to this issue is tied to the time constraint above.</para>
+        </listitem>
+
+        <listitem>
+          <para>Some servers do not support CLI scripts in their CRON jobs.
+          You will not be able to use this automatic update script on these
+          hosts. We strongly advise you to choose your host wisely, making
+          sure they do offer all the features you need, not solely on their
+          low price.</para>
+        </listitem>
+      </itemizedlist>
+
+      <bridgehead>Setting up a CRON job on cPanel</bridgehead>
+
+      <para>Go to your cPanel main page and choose the <guibutton>CRON
+      Jobs</guibutton> icon from the <guilabel>Advanced</guilabel> pane. In
+      the <guilabel>Add New CRON Job</guilabel> box on the page which loads,
+      enter the following information:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Common Settings</term>
+
+          <listitem>
+            <para>Choose the frequency of your backup, for example once per
+            day.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Command</term>
+
+          <listitem>
+            <para>Enter your backup command. Usually, you have to use
+            something like:</para>
+
+            <programlisting>/usr/bin/php5-cli /home/<replaceable>myusername</replaceable>/public_html/cli/cmsupdate.php</programlisting>
+
+            <para>where <replaceable>myusername</replaceable> is your
+            account's user name (most probably the same you use to login to
+            cPanel). Do note the path for the PHP command line executable:
+            <filename>/usr/bin/php5-cli</filename>. This is the default
+            location of the correct executable file for cPanel 11 and later.
+            Your host may use a different path to the executable. If the
+            command never runs, please ask your host. We can't help you with
+            that; only those who have set up the server know the changes they
+            have made to the default setup.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>Finally, click the <guibutton>Add New Cron Job</guibutton> button
+      to activate the CRON job.</para>
+
+      <bridgehead>Special considerations for HostGator</bridgehead>
+
+      <para>The location of the PHP CLI binary is
+      <filename>/usr/bin/php-cli</filename>. This means that your CRON command
+      line should look like:</para>
+
+      <para><programlisting>/opt/php53/bin/php /home/<replaceable>myusername</replaceable>/public_html/cli/cmsupdate.php</programlisting></para>
     </section>
+  </chapter>
+
+  <chapter xml:id="info-for-developers">
+    <title>Information for developers</title>
+
+    <para>TO-DO: We are currently working on providing developer-oriented
+    features. We will document them in this chapter.</para>
   </chapter>
 
   <appendix xml:id="gpl">
