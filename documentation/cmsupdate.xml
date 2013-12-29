@@ -151,17 +151,17 @@
       by the Free Software Foundation. It's truly Free software, in every
       sense of the word.</para>
 
-      <bridgehead>Why did we build this component instead of contribute it to
-      Joomla!?</bridgehead>
+      <bridgehead>Why build a new Joomla! update component?</bridgehead>
 
       <para>Akeeba Ltd and its developers have been involved with Joomla!
-      since its first day. We have been publishing our acclaimed Akeeba Backup
-      software (and its predecessor, JoomlaPack) since 2006, helping millions
-      of sites to have up-to-date backups and move between servers
-      effectively. Since 2010 we have also been publishing Admin Tools, a
-      collection of security and utilitarian features for the Joomla! CMS. One
-      of Admin Tools' features, Joomla! update, has been included in Joomla!
-      itself since version 2.5. It's rebranded as "Joomla! Update".</para>
+      since its first day. We have been publishing our Akeeba Backup software
+      (and its predecessor, JoomlaPack) since 2006, helping millions of sites
+      to have up-to-date backups and move between servers effectively. Since
+      2010 we have also been publishing Admin Tools, a collection of security
+      and utilitarian features for the Joomla! CMS. One of Admin Tools'
+      features, Joomla! update, has been included in Joomla! itself since
+      version 2.5. It was cut down on features and rebranded as "Joomla!
+      Update".</para>
 
       <para>In the roughly one year and a half between the release of Joomla!
       2.5 and starting work on Akeeba CMS Update we identified several issues
@@ -169,21 +169,23 @@
       project to change its distribution policy (i.e. providing updates for
       Joomla! Update before a new Joomla! release is issued) or stepped into
       the territory of the Joomla! libraries themselves. The scope of the
-      necessary changes was impossible to muster within a project that follows
-      a "design by committee" approach for all code decisions. Moreover, some
-      of the most advanced features (like backup on update) could never make
-      it into Joomla! itself. This is understandable, the Joomla! project
+      necessary changes lend itself to a Catch-22 situation: no code could be
+      written before a consensus on what the new code would look like was
+      reached, but no consensus could be reached unless there was a working
+      prototype of the new code. Moreover, some of the most advanced features
+      we'd like to put in (like backup on update) could never make it into
+      Joomla! itself. This is understandable, as the Joomla! project
       <emphasis>usually</emphasis> doesn't promote specific companies'
-      products, as would happen with Akeeba Backup in this case.</para>
+      products. These features would essentially be an unfair promotion of
+      Akeeba products (Akeeba Backup and Admin Tools).</para>
 
-      <para>Instead of wasting precious months to get few small changes in the
-      core, without even getting to an end result we'd feel comfortable with,
-      we decided to build our own vastly improved updater and put it out there
-      for real people to use it in the real world and prove its worth. Maybe,
-      in the future, some of its advanced features will be retrofitted to
-      Joomla! Update and the core Joomla! libraries. We intend to keep this
-      product around and update it often, based on our clients'
-      feedback.</para>
+      <para>Instead of wasting precious months to get too little changes in
+      the core too late, we decided to build our own radically improved
+      updater and publish it for real people to use it in the real world and
+      prove its worth. Maybe, in the future, some of its advanced features
+      will hopefully be retrofitted to the aging Joomla! Update and the core
+      Joomla! libraries. In any case, we intend to keep this product around
+      and update it often, based on our clients' feedback.</para>
     </section>
 
     <section xml:id="requirements">
@@ -725,7 +727,7 @@
             servers for available updates. The default is 6 hours. Trying to
             access Akeeba CMS Update more often than that will NOT refresh the
             updates cache unless you use the <guibutton>Reload update
-            information</guibutton> button. </para>
+            information</guibutton> button.</para>
           </listitem>
         </varlistentry>
 
