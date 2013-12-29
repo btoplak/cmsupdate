@@ -115,4 +115,9 @@
 
 	<!-- Installation / uninstallation PHP scripts -->
 	<scriptfile>script.cmsupdate.php</scriptfile>
+
+    <!-- Update servers -->
+    <updateservers>
+        <server type="extension" priority="1" name="Akeeba CMS Update"><![CDATA[http://cdn.akeebabackup.com/updates/cmsupdate.xml]]></server>
+    </updateservers>
 </extension>
