@@ -358,6 +358,12 @@ class CmsupdateModelUpdates extends FOFModel
 		return $params->get('backuponupdate', 1);
 	}
 
+	/**
+	 * Returns the backup profile ID selected by the user in the Options page
+	 * of the component. This will be used to take the pre-update backup.
+	 *
+	 * @return  integer  The Akeeba Backup profile ID
+	 */
 	public function getBackupProfile()
 	{
 		JLoader::import('cms.component.helper');
@@ -418,15 +424,18 @@ class CmsupdateModelUpdates extends FOFModel
 			throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_DOWNLOAD_NOUPDATESINSECTION', $section), 500);
 		}
 
-		// This trick forces the downloadurl variable to persist in the session
+		// This trick forces these state variables to persist in the session
 		if (!FOFPlatform::getInstance()->isCli())
 		{
 			JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', $update['package']);
+			JFactory::getApplication()->setUserState($this->getHash() . 'update', $update);
 			$dummy = $this->downloadurl;
+			$dummy = $this->update;
 		}
 		else
 		{
 			$this->downloadurl = $update['package'];
+			$this->update = $update;
 		}
 	}
 
@@ -614,6 +623,13 @@ class CmsupdateModelUpdates extends FOFModel
 		return $s;
 	}
 
+	/**
+	 * Creates the restoration.ini file which is used during the update
+	 * package's extraction. This file tells Akeeba Restore which package to
+	 * read and where and how to extract it.
+	 *
+	 * @return  boolean  True on success
+	 */
 	public function createRestorationINI()
 	{
 		// Get a password
@@ -876,6 +892,16 @@ ENDDATA;
 			$this->recursive_remove_directory($tempdir . '/cmsupdate');
 		}
 
+		// Clean up the state variables
+		if (!FOFPlatform::getInstance()->isCli())
+		{
+			JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', null);
+			JFactory::getApplication()->setUserState($this->getHash() . 'update', null);
+		}
+		$this->downloadurl = null;
+		$this->update = null;
+
+		// Run the update scripts if so requested
 		if ($runUpdateScripts)
 		{
 			$this->runUpdateScripts();
