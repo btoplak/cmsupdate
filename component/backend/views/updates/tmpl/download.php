@@ -20,7 +20,7 @@
 
 defined('_JEXEC') or die();
 
-JHtmlBehavior::framework(true);
+JHtml::_('behavior.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
