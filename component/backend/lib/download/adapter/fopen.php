@@ -27,7 +27,7 @@ class AcuDownloadAdapterFopen extends AcuDownloadAdapterAbstract implements AcuD
 {
 	public function __construct()
 	{
-		$this->priority = 105;
+		$this->priority = 100;
 		$this->supportsFileSize = false;
 		$this->supportsChunkDownload = true;
 		$this->name = 'fopen';

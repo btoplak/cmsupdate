@@ -1,3 +1,8 @@
 <?php die();?>
-Akeeba CMS Update 1.0.0
+Akeeba CMS Update 1.0.a2
 ================================================================================
+! Downloads using the fopen wrapper would fail (the Joomla! download server doesn't support staggered downloads)
+
+Akeeba CMS Update 1.0.a1
+================================================================================
+~ Initial alpha release

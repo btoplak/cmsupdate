@@ -27,7 +27,7 @@ class AcuDownloadAdapterCurl extends AcuDownloadAdapterAbstract implements AcuDo
 {
 	public function __construct()
 	{
-		$this->priority = 100;
+		$this->priority = 110;
 		$this->supportsFileSize = true;
 		$this->supportsChunkDownload = true;
 		$this->name = 'curl';
