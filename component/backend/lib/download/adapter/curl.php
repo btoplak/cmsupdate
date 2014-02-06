@@ -1,7 +1,7 @@
 <?php
 /**
  * @package    AkeebaCMSUpdate
- * @copyright  Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright  Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license    GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class AcuDownloadAdapterCurl extends AcuDownloadAdapterAbstract implements AcuDo
 {
 	public function __construct()
 	{
-		$this->priority = 100;
+		$this->priority = 110;
 		$this->supportsFileSize = true;
 		$this->supportsChunkDownload = true;
 		$this->name = 'curl';

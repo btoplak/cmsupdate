@@ -1,7 +1,7 @@
 <?php
 /**
  * @package    AkeebaCMSUpdate
- * @copyright  Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright  Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license    GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -190,6 +190,11 @@ class AcuDownload
 					// Currently downloaded size
 					$doneSize = 0;
 
+					if (@file_exists($local_file))
+					{
+						@unlink($local_file);
+					}
+
 					// Delete and touch the output file
 					$fp = @fopen($local_file, 'wb');
 
@@ -282,9 +287,9 @@ class AcuDownload
 
 					//debugMsg("-- Proceeding to next fragment, frag $frag");
 
-					if ($filesize < $length)
+					if (($filesize < $length) || ($filesize > $length))
 					{
-						// A partial download means we are done
+						// A partial download or a download larger than the frag size means we are done
 						$frag = -1;
 						//debugMsg("-- Import complete (partial download of last frag)");
 						$totalSize = $doneSize;

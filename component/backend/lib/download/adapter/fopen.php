@@ -1,7 +1,7 @@
 <?php
 /**
  * @package    AkeebaCMSUpdate
- * @copyright  Copyright (c)2010-2013 Nicholas K. Dionysopoulos
+ * @copyright  Copyright (c)2010-2014 Nicholas K. Dionysopoulos
  * @license    GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class AcuDownloadAdapterFopen extends AcuDownloadAdapterAbstract implements AcuD
 {
 	public function __construct()
 	{
-		$this->priority = 105;
+		$this->priority = 100;
 		$this->supportsFileSize = false;
 		$this->supportsChunkDownload = true;
 		$this->name = 'fopen';
