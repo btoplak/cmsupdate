@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.a3
+================================================================================
+! jQuery-powered update notification should only be shown on Joomla! 3 (throws an exception on Joomla! 2.5)
+
 Akeeba CMS Update 1.0.a2
 ================================================================================
 ! Downloads using the fopen wrapper would fail (the Joomla! download server doesn't support staggered downloads)
