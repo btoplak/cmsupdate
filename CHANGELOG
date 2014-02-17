@@ -3,6 +3,8 @@ Akeeba CMS Update 1.0.a3
 ================================================================================
 ! jQuery-powered update notification should only be shown on Joomla! 3 (throws an exception on Joomla! 2.5)
 # [HIGH] Upgrading from 2.x to 3.x could result in a broken site because the post-installation script couldn't run in some cases (also a problem in com_joomlaupdate - big whoops!)
+# [MEDIUM] The CLI update script doesn't work under Joomla! 2.5
+# [LOW] The Options page had untranslated strings under Joomla! 2.5
 
 Akeeba CMS Update 1.0.a2
 ================================================================================
