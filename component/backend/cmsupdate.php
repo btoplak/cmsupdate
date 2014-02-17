@@ -1,8 +1,8 @@
 <?php
 /**
- *  @package    AkeebaCMSUpdate
- *  @copyright  Copyright (c)2010-2014 Nicholas K. Dionysopoulos
- *  @license    GNU General Public License version 3, or later
+ * @package    AkeebaCMSUpdate
+ * @copyright  Copyright (c)2010-2014 Nicholas K. Dionysopoulos
+ * @license    GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,17 @@ defined('_JEXEC') or die();
 
 // Load FOF
 include_once JPATH_LIBRARIES . '/fof/include.php';
-if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+if (!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
 {
-	JError::raiseError ('500', 'Your Akeeba CMS Update installation is broken; please re-install. Alternatively, extract the installation archive and copy the fof directory inside your site\'s libraries directory.');
+	JError::raiseError('500', 'Your Akeeba CMS Update installation is broken; please re-install. Alternatively, extract the installation archive and copy the fof directory inside your site\'s libraries directory.');
+
+	return;
+}
+
+// Make sure we have Joomla! 2.5.15 or later
+if (version_compare(JVERSION, '2.5.15', 'lt'))
+{
+	JError::raiseError('500', 'Akeeba CMS Update requires Joomla! 2.5.15 or later.');
 
 	return;
 }
