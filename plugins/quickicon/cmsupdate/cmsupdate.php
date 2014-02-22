@@ -126,13 +126,12 @@ class plgQuickiconCmsupdate extends JPlugin
 			$ret['text'] = JText::sprintf('PLG_QUICKICON_CMSUPDATE_UPDATEAVAILABLE', $update['version']);
 			$ret['icon'] = 'header/icon-48-jupdate-updatefound.png';
 
-			// Add a prominent notification on the Control Panel page
-			JHtml::_('jquery.framework');
-
-			$buttonText = JText::sprintf('PLG_QUICKICON_CMSUPDATE_BUTTONTEXT', $update['version']);
-			$alertText = JText::_('PLG_QUICKICON_CMSUPDATE_UPDATEAVAILABLE', true);
-			$alertText = str_replace('%s', $update['version'], $alertText);
-			$script = <<< JS
+			if (version_compare(JVERSION, '3.1.0', 'ge'))
+			{
+				$buttonText = JText::sprintf('PLG_QUICKICON_CMSUPDATE_BUTTONTEXT', $update['version']);
+				$alertText = JText::_('PLG_QUICKICON_CMSUPDATE_UPDATEAVAILABLE', true);
+				$alertText = str_replace('%s', $update['version'], $alertText);
+				$script = <<< JS
 jQuery(document).ready(function()
 {
 	jQuery('#system-message-container').prepend(
@@ -145,7 +144,12 @@ jQuery(document).ready(function()
 
 JS;
 
-			JFactory::getDocument()->addScriptDeclaration($script);
+
+				// Add a prominent notification on the Control Panel page
+				JHtml::_('jquery.framework');
+
+				JFactory::getDocument()->addScriptDeclaration($script);
+			}
 		}
 
 		return array($ret);

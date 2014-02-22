@@ -118,7 +118,15 @@ class CmsupdateModelUpdates extends FOFModel
 	public function getAllUpdates($force = false)
 	{
 		// Get the component parameters
-		JLoader::import('cms.component.helper');
+		if (version_compare(JVERSION, '3.0.0', 'ge'))
+		{
+			JLoader::import('cms.component.helper');
+		}
+		else
+		{
+			JLoader::import('joomla.application.component.helper');
+		}
+
 		$params = JComponentHelper::getParams('com_cmsupdate');
 
 		// Do I have to check for updates?

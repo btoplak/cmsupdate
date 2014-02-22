@@ -119,7 +119,7 @@ FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 		<?php if ($this->updateInfo->status): ?>
 			<button onclick="cmsupdate.submitform('init', {source: '<?php echo $this->updateInfo->source ?>'}); return false;"
 					class="btn btn-primary hasTooltip" title="<?php echo JText::_('COM_CMSUPDATE_UPDATES_BTN_UPDATEMAIN_TOOLTIP') ?>">
-				<span class="icon icon-play"></span>
+				<span class="icon icon-play icon-white"></span>
 				<?php echo JText::sprintf('COM_CMSUPDATE_UPDATES_BTN_UPDATEMAIN', $this->updateInfo->{$this->updateInfo->source}['version']); ?>
 			</button>
 		<?php endif; ?>
@@ -176,7 +176,7 @@ FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 					<button class="btn btn-small btn-inverse hasTooltip"
 							onclick="cmsupdate.submitform('init', {source: '<?php echo $type ?>'}); return false;"
 							title="<?php echo JText::_('COM_CMSUPDATE_UPDATES_BTN_UPDATE_TOOLTIP') ?>">
-						<span class="icon icon-play"></span>
+						<span class="icon icon-play icon-white"></span>
 						<?php echo JText::sprintf('COM_CMSUPDATE_UPDATES_BTN_UPDATE', $update['version']); ?>
 					</button>
 				</td>
@@ -187,7 +187,7 @@ FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 
 					</a>
 					<a href="<?php echo $this->escape($update['infourl']) ?>" class="btn btn-small btn-info hasTooltip" title="<?php echo JText::_('COM_CMSUPDATE_UPDATES_BTN_INFO_TOOLTIP'); ?>" target="_blank">
-						<span class="icon icon-comment"></span>
+						<span class="icon icon-comment icon-white"></span>
 						<?php echo JText::_('COM_CMSUPDATE_UPDATES_BTN_INFO'); ?>
 					</a>
 				</td>

@@ -17,11 +17,6 @@ dry run
 	Check if files/directories are writeable without writing any files to disk.
 	possibly do this automatically (via configuration) in gui and cli modes
 
-alternate download adapters
-	fsockopen
-
-CLI script for update emails
-
 DONE:
 
 √ hybrid smart write engine

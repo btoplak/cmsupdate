@@ -6670,6 +6670,18 @@ if(!defined('KICKSTART'))
 				$basepath = rtrim( str_replace('\\','/',$basepath), '/' );
 				if(!empty($basepath)) $basepath .= '/';
 				$postproc->unlink( $basepath.'restoration.php' );
+
+				// Import a custom finalisation file
+				if (file_exists(__DIR__ . '/restore_finalisation.php'))
+				{
+					include_once __DIR__ . '/restore_finalisation.php';
+				}
+
+				// Run a custom finalisation script
+				if (function_exists('finalizeRestore'))
+				{
+					finalizeRestore($root, $basepath);
+				}
 				break;
 
 			default:
