@@ -549,10 +549,12 @@ class CmsupdateModelUpdates extends FOFModel
 	public function stepDownload($staggered = true)
 	{
 		$params = array(
-			'file'      => $this->getState('downloadurl', ''),
-			'frag'      => $this->getState('frag', -1),
-			'totalSize' => $this->getState('totalSize', -1),
-			'doneSize'  => $this->getState('doneSize', -1),
+			'file'      	=> $this->getState('downloadurl', ''),
+			'frag'      	=> $this->getState('frag', -1),
+			'totalSize' 	=> $this->getState('totalSize', -1),
+			'doneSize'  	=> $this->getState('doneSize', -1),
+			'maxExecTime'	=> '2',
+			'length'		=> 1048576 / 4,
 		);
 
 		$download = new AcuDownload();

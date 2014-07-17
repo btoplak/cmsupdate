@@ -92,7 +92,7 @@ cmsupdate.submitform = function(task, options, form)
  *
  * @returns  boolean
  */
-cmsupdate.toogleUpdateOptions = function()
+cmsupdate.toggleUpdateOptions = function()
 {
     (function($){
         var display = $('#updateOptions').css('display');

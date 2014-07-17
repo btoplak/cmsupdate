@@ -210,6 +210,14 @@ class Com_CmsupdateInstallerScript
 
 <h2>Akeeba CMS Update Installation Status</h2>
 
+<a href="index.php?option=com_cmsupdate" class="btn btn-large btn-lg btn-success">
+	Run Akeeba CMS Update
+</a>
+
+<p class="small">
+	The component is also available from Components, Akeeba CMS Update at any time.
+</p>
+
 <table class="adminlist table table-striped" width="100%">
 	<thead>
 		<tr>

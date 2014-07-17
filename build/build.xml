@@ -111,8 +111,8 @@
 	</target>
 
 	<target name="doc-j-pdf" description="Documentation for Joomla! in PDF format">
-		<exec command="xsltproc --nonet --xinclude --novalid --stringparam img.src.path ${dirs.documentation}/ --stringparam body.start.indent 0 --stringparam variablelist.term.break.after 1 --stringparam variablelist.term.separator &quot;&quot; --stringparam variablelist.max.termlength 12 --stringparam section.autolabel 1 --stringparam toc.section.depth 5 --stringparam fop1.extensions 1 --output ${dirs.bin.release}/cmsupdate.fo ${dirs.bin.dbxsl}/fo/docbook.xsl ${dirs.documentation}/cmsupdate.xml" dir="${project.basedir}" />
-		<exec command="fop -fo ${dirs.bin.release}/cmsupdate.fo -pdf ${dirs.bin.release}/cmsupdate.pdf" logoutput="true" />
+		<exec command="xsltproc --nonet --xinclude --novalid --stringparam body.start.indent 0 --stringparam variablelist.term.break.after 1 --stringparam variablelist.term.separator &quot;&quot; --stringparam variablelist.max.termlength 12 --stringparam section.autolabel 1 --stringparam toc.section.depth 5 --stringparam fop1.extensions 1 --output ${dirs.bin.release}/cmsupdate.fo ${dirs.bin.dbxsl}/fo/docbook.xsl ${dirs.documentation}/cmsupdate.xml" dir="${project.basedir}" />
+		<exec command="${dirs.bin.fop}/fop -fo ${dirs.bin.release}/cmsupdate.fo -pdf ${dirs.bin.release}/cmsupdate.pdf" logoutput="true" />
 		<delete file="${dirs.release}/cmsupdate.fo" quiet="yes" />
 	</target>
 
@@ -148,9 +148,9 @@
         <delete file="${dirs.root}/release.json" quiet="yes" />
     </target>
 
-	<target name="lang" description="Generate and upload language files">
-		<exec command="php ./buildlang.php" dir="buildlang" passthru="true" />
-	</target>
+    <target name="lang" description="Generate and upload language files">
+        <exec command="php ./buildlang.php ${application.startdir}/build.properties ${application.startdir}/.. ${version}" dir="buildlang" passthru="true" />
+    </target>
 	
 	<target name="release" depends="setup-properties" description="Upload the release to AkeebaBackup.com">
 		<copy file="./templates/release.json" tofile="${dirs.root}/release.json" overwrite="true">

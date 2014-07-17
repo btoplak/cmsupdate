@@ -1,5 +1,10 @@
 <?php die();?>
-Akeeba CMS Update 1.0.a3
+Akeeba CMS Update 1.0.b1 (BETA)
+================================================================================
++ Link to the component from post-installation page
+~ Interface clean-up
+
+Akeeba CMS Update 1.0.a3 (ALPHA)
 ================================================================================
 ! jQuery-powered update notification should only be shown on Joomla! 3 (throws an exception on Joomla! 2.5)
 ~ Warn users if they are using Joomla! 2.5.14 or earlier
@@ -8,10 +13,10 @@ Akeeba CMS Update 1.0.a3
 # [LOW] The Options page had untranslated strings under Joomla! 2.5
 # [LOW] Wrong icon colors in optional version installation buttons
 
-Akeeba CMS Update 1.0.a2
+Akeeba CMS Update 1.0.a2 (ALPHA)
 ================================================================================
 ! Downloads using the fopen wrapper would fail (the Joomla! download server doesn't support staggered downloads)
 
-Akeeba CMS Update 1.0.a1
+Akeeba CMS Update 1.0.a1 (ALPHA)
 ================================================================================
 ~ Initial alpha release

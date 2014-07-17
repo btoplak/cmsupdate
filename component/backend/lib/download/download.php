@@ -142,6 +142,7 @@ class AcuDownload
 		$maxExecTime = $this->getParam('maxExecTime', 5);
 		$runTimeBias = $this->getParam('runTimeBias', 75);
 		$minExecTime = $this->getParam('minExecTime', 1);
+		$length = $this->getParam('length', 1048576);
 
 		$localFilename = 'joomla.zip';
 		$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
@@ -212,7 +213,6 @@ class AcuDownload
 				}
 
 				// Calculate from and length
-				$length = 1048576;
 				$from = $frag * $length;
 				$to = $length + $from - 1;
 
