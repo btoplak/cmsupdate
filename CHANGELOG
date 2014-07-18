@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.b2 (BETA)
+================================================================================
+# [HIGH] F0F not installed on clean installations
+
 Akeeba CMS Update 1.0.b1 (BETA)
 ================================================================================
 + Link to the component from post-installation page
