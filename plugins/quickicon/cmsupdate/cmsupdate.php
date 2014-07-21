@@ -132,6 +132,9 @@ class plgQuickiconCmsupdate extends JPlugin
 				$alertText = JText::_('PLG_QUICKICON_CMSUPDATE_UPDATEAVAILABLE', true);
 				$alertText = str_replace('%s', $update['version'], $alertText);
 				$script = <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
 jQuery(document).ready(function()
 {
 	jQuery('#system-message-container').prepend(
