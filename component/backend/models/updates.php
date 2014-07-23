@@ -20,7 +20,7 @@
 
 defined('_JEXEC') or die();
 
-class CmsupdateModelUpdates extends FOFModel
+class CmsupdateModelUpdates extends F0FModel
 {
 	/**
 	 * Public constructor
@@ -433,7 +433,7 @@ class CmsupdateModelUpdates extends FOFModel
 		}
 
 		// This trick forces these state variables to persist in the session
-		if (!FOFPlatform::getInstance()->isCli())
+		if (!F0FPlatform::getInstance()->isCli())
 		{
 			JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', $update['package']);
 			JFactory::getApplication()->setUserState($this->getHash() . 'update', $update);
@@ -811,7 +811,7 @@ ENDDATA;
 		// Remove the old file, if it's there...
 		JLoader::import('joomla.filesystem.file');
 
-		$componentPaths = FOFPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
+		$componentPaths = F0FPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
 
 		$configpath = $componentPaths['admin'] . '/restoration.php';
 
@@ -884,7 +884,7 @@ ENDDATA;
 		// Remove the restoration.php file
 		JLoader::import('joomla.filesystem.file');
 
-		$componentPaths = FOFPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
+		$componentPaths = F0FPlatform::getInstance()->getComponentBaseDirs('com_cmsupdate');
 
 		$configpath = $componentPaths['admin'] . '/restoration.php';
 
@@ -903,7 +903,7 @@ ENDDATA;
 		}
 
 		// Clean up the state variables
-		if (!FOFPlatform::getInstance()->isCli())
+		if (!F0FPlatform::getInstance()->isCli())
 		{
 			JFactory::getApplication()->setUserState($this->getHash() . 'downloadurl', null);
 			JFactory::getApplication()->setUserState($this->getHash() . 'update', null);

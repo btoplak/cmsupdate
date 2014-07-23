@@ -24,7 +24,7 @@ JHtml::_('behavior.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
-FOFTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
+F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 
 JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 ?>

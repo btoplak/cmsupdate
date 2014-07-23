@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fof>
+<f0f>
     <backend>
         <dispatcher>
             <option name="default_view">updates</option>
         </dispatcher>
     </backend>
-</fof>
+</f0f>

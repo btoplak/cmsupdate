@@ -20,7 +20,7 @@
 
 defined('_JEXEC') or die();
 
-class CmsupdateControllerUpdate extends FOFController
+class CmsupdateControllerUpdate extends F0FController
 {
 	/**
 	 * Executes a given controller task. The onBefore<task> and onAfter<task>
@@ -98,7 +98,7 @@ class CmsupdateControllerUpdate extends FOFController
 
 		// Proceed to download
 		$token = '';
-		if (!FOFPlatform::getInstance()->isCli())
+		if (!F0FPlatform::getInstance()->isCli())
 		{
 			$token = '&' . JFactory::getSession()->getFormToken() . '=1';
 		}
@@ -195,7 +195,7 @@ class CmsupdateControllerUpdate extends FOFController
 
 	public function htmaker()
 	{
-		$htMakerModel = FOFModel::getTmpInstance('Htmaker', 'AdmintoolsModel');
+		$htMakerModel = F0FModel::getTmpInstance('Htmaker', 'AdmintoolsModel');
 		$config = $htMakerModel->loadConfiguration();
 		$config->exceptionfiles[] = 'administrator/components/com_cmsupdate/restore.php';
 		$config->exceptionfiles = array_unique($config->exceptionfiles);

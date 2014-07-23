@@ -73,7 +73,7 @@ class AcuAutoloader
 	 */
 	public function autoload_acu_core($class_name)
 	{
-		// Make sure the class has a FOF prefix
+		// Make sure the class has a F0F prefix
 		if (substr($class_name, 0, 3) != 'Acu')
 		{
 			return;

@@ -20,7 +20,7 @@
 
 defined('_JEXEC') or die();
 
-class CmsupdateViewUpdates extends FOFViewHtml
+class CmsupdateViewUpdates extends F0FViewHtml
 {
 	public function onBrowse($tpl = null)
 	{

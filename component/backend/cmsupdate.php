@@ -20,11 +20,11 @@
 
 defined('_JEXEC') or die();
 
-// Load FOF
-include_once JPATH_LIBRARIES . '/fof/include.php';
-if (!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+// Load F0F
+include_once JPATH_LIBRARIES . '/f0f/include.php';
+if (!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 {
-	JError::raiseError('500', 'Your Akeeba CMS Update installation is broken; please re-install. Alternatively, extract the installation archive and copy the fof directory inside your site\'s libraries directory.');
+	JError::raiseError('500', 'Your Akeeba CMS Update installation is broken; please re-install. Alternatively, extract the installation archive and copy the f0f directory to your site\'s libraries/f0f directory.');
 
 	return;
 }
@@ -47,7 +47,7 @@ if (!class_exists('AcuAutoloader', false))
 // Load Akeeba Strapper
 if (!class_exists('AkeebaStrapper'))
 {
-	require_once FOFTemplateUtils::parsePath('media://akeeba_strapper/strapper.php', true);
+	require_once F0FTemplateUtils::parsePath('media://akeeba_strapper/strapper.php', true);
 
 	AkeebaStrapper::jQuery();
 	AkeebaStrapper::bootstrap();
@@ -59,4 +59,4 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmsupdate'))
 	return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
-FOFDispatcher::getTmpInstance('com_cmsupdate')->dispatch();
+F0FDispatcher::getTmpInstance('com_cmsupdate')->dispatch();

@@ -20,7 +20,7 @@
 
 defined('_JEXEC') or die();
 
-class CmsupdateToolbar extends FOFToolbar
+class CmsupdateToolbar extends F0FToolbar
 {
 	public function onUpdates()
 	{

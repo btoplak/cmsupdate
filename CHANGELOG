@@ -2,6 +2,7 @@
 Akeeba CMS Update 1.0.b3 (BETA)
 ================================================================================
 ~ Even better workaround for very badly written system plugins which output Javascript without a trailing semicolon and/or newline, leading to Javascript errors. This is not a bug in our software, it's a bug in those badly written plugins and WE have to work around THEIR bad code!
+# [HIGH] The component wouldn't work on Joomla! 2.5
 
 Akeeba CMS Update 1.0.b2 (BETA)
 ================================================================================
