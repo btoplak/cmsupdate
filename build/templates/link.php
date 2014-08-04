@@ -1,5 +1,7 @@
 <?php
 $hardlink_files = array(
+	# Akeeba Restore from the Akeeba Kickstart repository
+	'../kickstart/source/output/restore.php'    => 'component/backend/restore.php',
 );
 
 $symlink_files = array(

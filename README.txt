@@ -25,6 +25,7 @@ You will also need the following path structure on your system
 
 - buildfiles	Akeeba Build Tools (https://github.com/akeeba/buildfiles)
 - fof			Framework on Framework (https://github.com/akeeba/fof)
+- kickstart		Akeeba Kickstart (https://github.com/akeeba/kickstart)
 
 You will need to use the exact folder names specified here.
 
