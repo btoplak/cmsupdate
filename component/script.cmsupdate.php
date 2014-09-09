@@ -139,6 +139,26 @@ class Com_CmsupdateInstallerScript extends F0FUtilsInstallscript
 		'cmsupdate.php',
 	);
 
+    /**
+     * Runs after install, update or discover_update
+     *
+     * @param string     $type install, update or discover_update
+     * @param JInstaller $parent
+     */
+    function postflight($type, $parent)
+    {
+        /** @var CmsupdateModelStats $model */
+        // Let's install common tables
+        $model = F0FModel::getTmpInstance('Stats', 'CmsupdateModel');
+
+        if(method_exists($model, 'checkAndFixCommonTables'))
+        {
+            $model->checkAndFixCommonTables();
+        }
+
+        parent::postflight($type, $parent);
+    }
+
 	/**
 	 * Renders the post-installation message
 	 */

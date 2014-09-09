@@ -220,3 +220,9 @@ F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
 		</div>
 	</div>
 </form>
+<?php
+if($this->statsIframe)
+{
+    echo $this->statsIframe;
+}
+?>

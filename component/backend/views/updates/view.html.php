@@ -35,6 +35,9 @@ class CmsupdateViewUpdates extends F0FViewHtml
 		$this->needsConfig			= $this->hasAkeebaBackup || ($this->ftpOptions['enable'] && (empty($this->ftpOptions['user']) || empty($this->ftpOptions['pass'])));
 		$this->hasBackupOnUpdate	= $model->hasBackupOnUpdate();
 
+        // Collect information about the site
+        $this->statsIframe = F0FModel::getTmpInstance('Stats', 'CmsupdateModel')->collectStatistics(true);
+
 		return true;
 	}
 

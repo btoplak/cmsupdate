@@ -18,6 +18,7 @@
 /component/fof
 /component/language/backend/en-GB
 /component/language/frontend/en-GB
+/component/backend/lib/stats
 /component/strapper
 
 /plugins/*/language/en-GB

@@ -38,4 +38,6 @@ $symlink_folders = array(
 	# Akeeba Strapper
 	'../fof/strapper'							=> 'component/strapper',
 
+    // Usage library
+    '../usagestats/lib'                         => 'component/backend/lib/stats'
 );
