@@ -81,9 +81,9 @@ class plgSystemCmsupdateemail extends JPlugin
 		}
 
 		// Load FOF
-		include_once JPATH_LIBRARIES . '/fof/include.php';
+		include_once JPATH_LIBRARIES . '/f0f/include.php';
 
-		if(!defined('FOF_INCLUDED') || !class_exists('FOFForm', true))
+		if(!defined('F0F_INCLUDED') || !class_exists('F0FForm', true))
 		{
 			return;
 		}
@@ -96,7 +96,7 @@ class plgSystemCmsupdateemail extends JPlugin
 		}
 
 		// Get the updates
-		$model = FOFModel::getTmpInstance('Updates', 'CmsupdateModel');
+		$model = F0FModel::getTmpInstance('Updates', 'CmsupdateModel');
 		$updates = $model->getUpdateInfo();
 
 		if (!$updates->status)

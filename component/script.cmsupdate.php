@@ -24,7 +24,7 @@ if (!defined('F0F_INCLUDED'))
 {
 	$paths = array(
 		(defined('JPATH_LIBRARIES') ? JPATH_LIBRARIES : JPATH_ROOT . '/libraries') . '/f0f/include.php',
-		__DIR__ . '/f0f/include.php',
+		__DIR__ . '/fof/include.php',
 	);
 
 	foreach ($paths as $filePath)
@@ -39,19 +39,19 @@ if (!defined('F0F_INCLUDED'))
 // Pre-load the installer script class from our own copy of FOF
 if (!class_exists('F0FUtilsInstallscript', false))
 {
-	@include_once __DIR__ . '/f0f/utils/installscript/installscript.php';
+	@include_once __DIR__ . '/fof/utils/installscript/installscript.php';
 }
 
 // Pre-load the database schema installer class from our own copy of FOF
 if (!class_exists('F0FDatabaseInstaller', false))
 {
-	@include_once __DIR__ . '/f0f/database/installer.php';
+	@include_once __DIR__ . '/fof/database/installer.php';
 }
 
 // Pre-load the update utility class from our own copy of FOF
 if (!class_exists('F0FUtilsUpdate', false))
 {
-	@include_once __DIR__ . '/f0f/utils/update/update.php';
+	@include_once __DIR__ . '/fof/utils/update/update.php';
 }
 
 // Pre-load the cache cleaner utility class from our own copy of FOF

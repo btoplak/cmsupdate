@@ -1,5 +1,9 @@
 <?php die();?>
-Akeeba CMS Update 1.0.b3 (BETA)
+Akeeba CMS Update 1.0.1
+================================================================================
+# [HIGH] References to FOF instead of F0F would cause problems on Joomla! 2.5
+
+Akeeba CMS Update 1.0.0
 ================================================================================
 + Anonymous reporting of PHP, MySQL and CMS versions (opt-out through the options)
 ~ Even better workaround for very badly written system plugins which output Javascript without a trailing semicolon and/or newline, leading to Javascript errors. This is not a bug in our software, it's a bug in those badly written plugins and WE have to work around THEIR bad code!
