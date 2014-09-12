@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.2
+================================================================================
+~ Some servers seem to try and load the AkeebaUsagestats class twice
+
 Akeeba CMS Update 1.0.1
 ================================================================================
 # [HIGH] References to FOF instead of F0F would cause problems on Joomla! 2.5

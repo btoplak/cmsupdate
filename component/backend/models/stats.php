@@ -102,7 +102,10 @@ class CmsupdateModelStats extends F0FModel
 			return false;
 		}
 
-		require_once JPATH_ROOT . '/administrator/components/com_cmsupdate/lib/stats/usagestats.php';
+		if (!class_exists('AkeebaUsagestats', false))
+		{
+			require_once JPATH_ROOT . '/administrator/components/com_cmsupdate/lib/stats/usagestats.php';
+		}
 
 		// UsageStats file is missing, no need to continue
 		if (!class_exists('AkeebaUsagestats'))
