@@ -2,6 +2,7 @@
 Akeeba CMS Update 1.0.2
 ================================================================================
 ~ Some servers seem to try and load the AkeebaUsagestats class twice
+# [MEDIUM] CLI auto-update script doesn't work
 
 Akeeba CMS Update 1.0.1
 ================================================================================

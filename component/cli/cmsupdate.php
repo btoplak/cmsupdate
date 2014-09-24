@@ -230,8 +230,9 @@ class CmsUpdateCli extends JApplicationCli
 		// Required by Joomla!
 		JLoader::import('joomla.environment.request');
 
-		// Load FOF
+		// Load FOF and F0F
 		JLoader::import('fof.include');
+		JLoader::import('f0f.include');
 
 		// Load the ACU autoloader
 		require_once JPATH_ADMINISTRATOR . '/components/com_cmsupdate/lib/autoloader.php';
@@ -271,7 +272,7 @@ class CmsUpdateCli extends JApplicationCli
 		}
 
 		// Load the Model
-		$this->model = FOFModel::getTmpInstance('Updates', 'CmsupdateModel');
+		$this->model = F0FModel::getTmpInstance('Updates', 'CmsupdateModel');
 
 		// Check for updates
 		$this->out('Checking for updates...');
