@@ -1,6 +1,7 @@
 <?php die();?>
 Akeeba CMS Update 1.0.2
 ================================================================================
+! [SECURITY: High] Possibility of arbitrary file writing while an update is being extracted
 ~ Some servers seem to try and load the AkeebaUsagestats class twice
 # [MEDIUM] CLI auto-update script doesn't work
 
