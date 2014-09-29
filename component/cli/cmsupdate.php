@@ -231,7 +231,6 @@ class CmsUpdateCli extends JApplicationCli
 		JLoader::import('joomla.environment.request');
 
 		// Load FOF and F0F
-		JLoader::import('fof.include');
 		JLoader::import('f0f.include');
 
 		// Load the ACU autoloader
