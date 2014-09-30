@@ -238,7 +238,7 @@ cmsupdate.doEncryptedAjax = function(data, successCallback, errorCallback)
         type: "POST",
         url: this.ajax_url,
         cache: false,
-        data: data,
+        data: post_data,
         timeout: 600000,
 
         success: function(msg, responseXML)
