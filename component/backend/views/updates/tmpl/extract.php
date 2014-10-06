@@ -24,10 +24,10 @@ JHtml::_('behavior.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
-F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
-F0FTemplateUtils::addJS('media://com_cmsupdate/js/encryption.js');
+F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js?'.ACU_VERSIONHASH);
+F0FTemplateUtils::addJS('media://com_cmsupdate/js/encryption.js?'.ACU_VERSIONHASH);
 
-JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
+JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js?'.ACU_VERSIONHASH);
 
 ?>
 
@@ -103,12 +103,12 @@ JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 				$('#extractErrorText').html(msg);
 				$('#extractError').show('fast');
 			})(cmsupdate.jQuery);
-		}
+		};
 
 		cmsupdate.nextStep = function()
 		{
 			window.location = 'index.php?option=com_cmsupdate&view=update&task=extract&<?php echo JFactory::getSession()->getFormToken() ?>=1';
-		}
+		};
 
 		$(document).ready(function(){
 			cmsupdate.ajax_url = '<?php echo JUri::base() ?>components/com_cmsupdate/restore.php';

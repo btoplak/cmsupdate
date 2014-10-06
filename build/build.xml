@@ -2,7 +2,7 @@
 <!--
 	Akeeba CMS Update build file for Phing
 	written by Nicholas K. Dionysopoulos
-	
+
 	Run "phing" from the build directory to build the component and plugins
 -->
 <project name="AkeebaCMSUpdate" description="Akeeba CMS Update" default="git" >
@@ -34,18 +34,18 @@
 	<fileset dir="${dirs.component}" id="component">
 		<include name="**" />
         <exclude name="backend/restoration.php" />
-	</fileset>	
+	</fileset>
 
 	<!--
 	====================================================================================================
 	Tasks - General
 	====================================================================================================
 	-->
-	
+
 	<target name="git" description="Makes basic stuff"
 		depends="new-release,setup-properties,component-package">
 	</target>
-	
+
 	<target name="all" description="Makes everything"
 		depends="git,doc-j-pdf,lang">
 	</target>
@@ -60,7 +60,7 @@
 			</fileset>
 		</delete>
 	</target>
-	
+
 	<target name="setup-properties" description="Set up version and build properties">
 		<!-- Initialize the build.date timestamp -->
 		<tstamp>
@@ -82,7 +82,7 @@
 	Tasks - Joomla! packages
 	====================================================================================================
 	-->
-	
+
 	<target name="component-package" description="Component package build"
 		depends="new-release,setup-properties">
 		<!-- Create the package -->
@@ -91,10 +91,18 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="DATE" value="${build.date}" />
 					<token key="VERSION" value="${version}" />
-				</replacetokens>				
+				</replacetokens>
 			</filterchain>
 		</copy>
-		
+		<copy file="./templates/version.php" tofile="${dirs.component}/backend/version.php" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="DATE" value="${build.date}" />
+					<token key="VERSION" value="${version}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+
 		<zipme basedir="${dirs.component}" destfile="${dirs.release}/com_cmsupdate-${version}.zip" includeemptydirs="true">
 			<fileset refid="component" />
 		</zipme>
@@ -151,7 +159,7 @@
     <target name="lang" description="Generate and upload language files">
         <exec command="php ./buildlang.php ${application.startdir}/build.properties ${application.startdir}/.. ${version}" dir="buildlang" passthru="true" />
     </target>
-	
+
 	<target name="release" depends="setup-properties" description="Upload the release to AkeebaBackup.com">
 		<copy file="./templates/release.json" tofile="${dirs.root}/release.json" overwrite="true">
 			<filterchain id="standard-tokens">
@@ -183,13 +191,13 @@
 			level="debug">
 			<fileset dir="${dirs.root}">
 				<include name="CHANGELOG"/>
-			</fileset>			
+			</fileset>
 			<fileset dir="${dirs.release}">
 				<include name="com_cmsupdate*.zip"/>
-			</fileset>			
+			</fileset>
 		</ftpdeploy>
 	</target>
-	
+
 	<target name="docsdeploy">
 		<echo>Uploading CMS Update documentation</echo>
 		<ftpdeploy
@@ -203,7 +211,7 @@
 			level="debug">
 			<fileset dir="${dirs.documentation}">
 				<include name="*.xml"/>
-			</fileset>			
+			</fileset>
 		</ftpdeploy>
 	</target>
 </project>

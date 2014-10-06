@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.3
+================================================================================
+! Javascript bug broke the update process
+
 Akeeba CMS Update 1.0.2
 ================================================================================
 ! [SECURITY: High] Possibility of arbitrary file writing while an update is being extracted
