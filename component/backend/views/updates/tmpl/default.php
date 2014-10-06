@@ -24,7 +24,7 @@ JHtml::_('behavior.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
-F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
+F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js?'.ACU_VERSIONHASH);
 ?>
 <form action="index.php" method="POST" id="adminForm">
 	<input type="hidden" name="option" value="com_cmsupdate" />

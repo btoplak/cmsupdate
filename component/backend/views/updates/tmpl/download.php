@@ -24,9 +24,9 @@ JHtml::_('behavior.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
-F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js');
+F0FTemplateUtils::addJS('media://com_cmsupdate/js/common.js?'.ACU_VERSIONHASH);
 
-JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
+JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js?'.ACU_VERSIONHASH);
 ?>
 
 <div id="downloadProgress">
@@ -42,7 +42,7 @@ JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 	<div class="alert alert-info" id="downloadProgressInfo">
 		<h4>
 			<?php echo JText::_('COM_CMSUPDATE_DOWNLOAD_LBL_DOWNLOADPROGRESS') ?>
-		<h4>
+		</h4>
 		<div class="panel-body" id="downloadProgressBarText"></div>
 	</div>
 </div>
@@ -68,12 +68,12 @@ JFactory::getDocument()->addScript('//yandex.st/json2/2011-10-19/json2.min.js');
 				$('#downloadErrorText').html(msg);
 				$('#downloadError').show('fast');
 			})(cmsupdate.jQuery);
-		}
+		};
 
 		cmsupdate.nextStep = function()
 		{
 			window.location = 'index.php?option=com_cmsupdate&view=update&task=extract&<?php echo JFactory::getSession()->getFormToken() ?>=1';
-		}
+		};
 
 		$(document).ready(function(){
 			cmsupdate.ajax_url = 'index.php?option=com_cmsupdate&view=update&task=downloader&format=raw';
