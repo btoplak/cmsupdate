@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.4
+================================================================================
+~ Updated .htaccess files for Apache 2.4 compatibility
+
 Akeeba CMS Update 1.0.3
 ================================================================================
 ! Javascript bug broke the update process
