@@ -125,11 +125,13 @@ class Com_CmsupdateInstallerScript extends F0FUtilsInstallscript
 	 */
 	protected $removeFilesAllVersions = array(
 		'files'	=> array(
+			'administrator/components/com_cmsupdate/lib/autoloader',
 		),
 		'folders' => array(
 			// These classes are now part of FOF
 			'administrator/components/com_cmsupdate/lib/download',
 			'administrator/components/com_cmsupdate/lib/timer',
+			'administrator/components/com_cmsupdate/lib/update',
 		)
 	);
 

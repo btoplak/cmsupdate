@@ -233,10 +233,6 @@ class CmsUpdateCli extends JApplicationCli
 		// Load FOF and F0F
 		JLoader::import('f0f.include');
 
-		// Load the ACU autoloader
-		require_once JPATH_ADMINISTRATOR . '/components/com_cmsupdate/lib/autoloader.php';
-		AcuAutoloader::init();
-
 		// Load the language files
 		$jlang = JFactory::getLanguage();
 		$jlang->load('com_cmsupdate', JPATH_ADMINISTRATOR);

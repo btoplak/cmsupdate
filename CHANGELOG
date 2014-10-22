@@ -2,7 +2,7 @@
 Akeeba CMS Update 1.0.4
 ================================================================================
 ~ Updated .htaccess files for Apache 2.4 compatibility
-~ Now using the download library in FOF
+~ Now using the download and update libraries in FOF
 
 Akeeba CMS Update 1.0.3
 ================================================================================

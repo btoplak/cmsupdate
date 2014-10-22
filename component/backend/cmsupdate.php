@@ -37,13 +37,6 @@ if (version_compare(JVERSION, '2.5.15', 'lt'))
 	return;
 }
 
-// Load the ACU library's autoloader
-if (!class_exists('AcuAutoloader', false))
-{
-	require_once __DIR__ . '/lib/autoloader.php';
-	AcuAutoloader::init();
-}
-
 // Load Akeeba Strapper
 if (!class_exists('AkeebaStrapper'))
 {

@@ -97,13 +97,6 @@ class plgQuickiconCmsupdate extends JPlugin
 			return;
 		}
 
-		// Load the ACU library's autoloader
-		if (!class_exists('AcuAutoloader', false))
-		{
-			require_once JPATH_ADMINISTRATOR . '/components/com_cmsupdate/lib/autoloader.php';
-			AcuAutoloader::init();
-		}
-
 		// Get the updates
 		$model = F0FModel::getTmpInstance('Updates', 'CmsupdateModel');
 		$updates = $model->getUpdateInfo();

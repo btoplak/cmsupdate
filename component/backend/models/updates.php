@@ -207,7 +207,7 @@ class CmsupdateModelUpdates extends F0FModel
 			}
 
 			// Get the updates
-			$provider = new AcuUpdateProviderJoomla();
+			$provider = new F0FUtilsUpdateJoomla();
 			$cache = $provider->getUpdates($sources);
 
 			// JSON-encode them
@@ -271,7 +271,7 @@ class CmsupdateModelUpdates extends F0FModel
 		$params = JComponentHelper::getParams('com_cmsupdate');
 		$minnotify = $params->get('minnotify', 'current');
 
-		$provider = new AcuUpdateProviderJoomla();
+		$provider = new F0FUtilsUpdateJoomla();
 		$jVersion = $provider->sanitiseVersion(JVERSION);
 
 		// We trigger an update only when there is a new release of the minimum specified stability available for download
