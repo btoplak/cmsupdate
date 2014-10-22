@@ -50,7 +50,7 @@ class AcuUpdateProviderCollection
 		);
 
 		// Download and parse the XML file
-		$donwloader = new AcuDownload();
+		$donwloader = new F0FDownload();
 		$xmlSource = $donwloader->getFromURL($url);
 
 		try

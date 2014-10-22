@@ -549,7 +549,7 @@ class CmsupdateModelUpdates extends F0FModel
 	public function stepDownload($staggered = true)
 	{
 		$params = array(
-			'file'      	=> $this->getState('downloadurl', ''),
+			'url'      		=> $this->getState('downloadurl', ''),
 			'frag'      	=> $this->getState('frag', -1),
 			'totalSize' 	=> $this->getState('totalSize', -1),
 			'doneSize'  	=> $this->getState('doneSize', -1),
@@ -557,59 +557,59 @@ class CmsupdateModelUpdates extends F0FModel
 			'length'		=> 1048576 / 4,
 		);
 
-		$download = new AcuDownload();
+		$download = new F0FDownload();
 
 		if ($staggered)
 		{
 			$retArray = $download->importFromURL($params);
+
+			return $retArray;
 		}
-		else
+
+		$retArray = array(
+			"status"    => true,
+			"error"     => '',
+			"frag"      => 1,
+			"totalSize" => 0,
+			"doneSize"  => 0,
+			"percent"   => 0,
+		);
+
+		try
 		{
-			$retArray = array(
-				"status"    => true,
-				"error"     => '',
-				"frag"      => 1,
-				"totalSize" => 0,
-				"doneSize"  => 0,
-				"percent"   => 0,
-			);
+			$result = $download->getFromURL($params['file']);
 
-			try
+			if ($result === false)
 			{
-				$result = $download->getFromURL($params['file']);
-
-				if ($result === false)
-				{
-					throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTDOWNLOADFROMURL', $params['file']), 500);
-				}
-
-				$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
-				$tmpDir = rtrim($tmpDir, '/\\');
-				$localFilename = $tmpDir . '/joomla.zip';
-
-				$status = file_put_contents($localFilename, $result);
-
-				if (!$status)
-				{
-					JLoader::import('joomla.filesystem.file');
-					$status = JFile::write($localFilename, $result);
-				}
-
-				if (!$status)
-				{
-					throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTWRITETOFILE', $localFilename), 500);
-				}
-
-				$retArray['status'] = true;
-				$retArray['totalSize'] = strlen($result);
-				$retArray['doneSize'] = $retArray['totalSize'];
-				$retArray['percent'] = 100;
+				throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTDOWNLOADFROMURL', $params['file']), 500);
 			}
-			catch (Exception $e)
+
+			$tmpDir = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
+			$tmpDir = rtrim($tmpDir, '/\\');
+			$localFilename = $tmpDir . '/joomla.zip';
+
+			$status = file_put_contents($localFilename, $result);
+
+			if (!$status)
 			{
-				$retArray['status'] = true;
-				$retArray['error'] = $e->getMessage();
+				JLoader::import('joomla.filesystem.file');
+				$status = JFile::write($localFilename, $result);
 			}
+
+			if (!$status)
+			{
+				throw new Exception(JText::sprintf('COM_CMSUPDATE_ERR_LIB_COULDNOTWRITETOFILE', $localFilename), 500);
+			}
+
+			$retArray['status'] = true;
+			$retArray['totalSize'] = strlen($result);
+			$retArray['doneSize'] = $retArray['totalSize'];
+			$retArray['percent'] = 100;
+		}
+		catch (Exception $e)
+		{
+			$retArray['status'] = true;
+			$retArray['error'] = $e->getMessage();
 		}
 
 		return $retArray;

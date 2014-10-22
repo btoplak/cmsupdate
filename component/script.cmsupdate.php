@@ -127,6 +127,9 @@ class Com_CmsupdateInstallerScript extends F0FUtilsInstallscript
 		'files'	=> array(
 		),
 		'folders' => array(
+			// These classes are now part of FOF
+			'administrator/components/com_cmsupdate/lib/download',
+			'administrator/components/com_cmsupdate/lib/timer',
 		)
 	);
 

@@ -75,7 +75,7 @@ class AcuUpdateProviderJoomla
 		$ret = array();
 
 		// Get and parse the XML source
-		$donwloader = new AcuDownload();
+		$donwloader = new F0FDownload();
 		$xmlSource = $donwloader->getFromURL($url);
 
 		try
