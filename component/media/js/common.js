@@ -534,6 +534,11 @@ cmsupdate.stepDownload = function(data)
     })(cmsupdate.jQuery);
 }
 
+cmsupdate.downloadErrorHandler = function(error)
+{
+    alert(error);
+}
+
 /**
  * Pings the update script (making sure its executable)
  */

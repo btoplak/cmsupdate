@@ -555,6 +555,7 @@ class CmsupdateModelUpdates extends F0FModel
 			'doneSize'  	=> $this->getState('doneSize', -1),
 			'maxExecTime'	=> '2',
 			'length'		=> 1048576 / 4,
+			'localFilename'	=> 'joomla.zip'
 		);
 
 		$download = new F0FDownload();
