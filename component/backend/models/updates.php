@@ -269,7 +269,7 @@ class CmsupdateModelUpdates extends F0FModel
 
 		// Get the minnotify setting
 		$params = JComponentHelper::getParams('com_cmsupdate');
-		$minnotify = $params->get('minnotify', 'current');
+		$minnotify = $params->get('minnotify', 'lts');
 
 		$provider = new F0FUtilsUpdateJoomla();
 		$jVersion = $provider->sanitiseVersion(JVERSION);

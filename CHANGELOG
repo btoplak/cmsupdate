@@ -1,6 +1,7 @@
 <?php die();?>
 Akeeba CMS Update 1.0.4
 ================================================================================
+~ Changed the default update preference to "Current branch or LTS release" which is the best choice for Joomla! 3.x
 ~ Updated .htaccess files for Apache 2.4 compatibility
 ~ Now using the download and update libraries in FOF
 

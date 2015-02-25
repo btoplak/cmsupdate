@@ -32,7 +32,7 @@
         <field
                 name="minnotify"
                 type="list"
-                default="current"
+                default="lts"
                 label="COM_CMSUPDATE_CONFIG_MINNOTIFY_LABEL"
                 description="COM_CMSUPDATE_CONFIG_MINNOTIFY_DESC"
                 >
