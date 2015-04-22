@@ -52,4 +52,8 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_cmsupdate'))
 	return JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
+require_once __DIR__.'/version.php';
+
+define('ACU_VERSIONHASH', md5(ACU_VERSION.ACU_DATE));
+
 F0FDispatcher::getTmpInstance('com_cmsupdate')->dispatch();
