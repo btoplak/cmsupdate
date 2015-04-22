@@ -1,4 +1,8 @@
 <?php die();?>
+Akeeba CMS Update 1.0.5
+================================================================================
+# [HIGH] Hosts with PHP Safe Mode or open_basedir restrictions displayed an invalid HTTP 302 header message and couldn't download the update.
+
 Akeeba CMS Update 1.0.4
 ================================================================================
 ~ Changed the default update preference to "Current branch or LTS release" which is the best choice for Joomla! 3.x
